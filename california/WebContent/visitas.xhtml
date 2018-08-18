@@ -1,0 +1,202 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                template="/WEB-INF/template.xhtml">
+                
+    <ui:define name="title">Empty Page</ui:define>
+
+    <ui:define name="viewname">Empty</ui:define>
+
+    <ui:define name="content">
+    	<h:form id="f1">
+        <div class="ui-g">
+        
+        
+        <!-- INICIO FILTRO -->
+            <div class="ui-g-12">
+                <div class="card">
+                    
+                    <p:panel id="basic" header="Filtro de Visitas" toggleable="true" collapsed="true">
+                    	<h:panelGrid id="panelVisitFilter" columns="1" styleClass="form-group ui-panelgrid-blank" >
+                			<p:outputPanel style="margin-bottom:10px;">
+	                			<p:outputLabel value="Fecha desde:" for="fechaDesdeFilter" />
+	                			<p:calendar id="fechaDesdeFilter" value="#{visitController.filter.fechaDesde}"  pattern="MM/dd/yyyy" showOn="button" />
+							</p:outputPanel>
+							<p:outputPanel style="margin-bottom:10px;">
+	                			<p:outputLabel value="Fecha hasta:" for="fechaHastaFilter"  />
+	                			<p:calendar id="fechaHastaFilter" value="#{visitController.filter.fechaHasta}" pattern="MM/dd/yyyy" showOn="button" />
+                			</p:outputPanel>
+                			<p:outputPanel style="margin-bottom:10px;">
+	                			<!-- <h:outputLabel value="Clientes" for="clienteFilter" />   -->    			
+	                			<p:selectOneListbox id="clienteFilter" value="#{visitController.filter.cliente}" converter="customerConverter" 
+	                								var="t" filter="true" filterMatchMode="contains"
+	                								style="width:auto">
+						            <p:ajax listener="#{visitController.selectCustomerOnFilter}"  />
+						            <f:selectItems value="#{visitController.customers}" var="customer" itemLabel="#{customer.nombrePoblacion}" itemValue="#{customer}" />
+						            <p:column>
+						                <h:outputText value="#{t.nombrePoblacion}" />
+						            </p:column>
+						        </p:selectOneListbox>
+						    </p:outputPanel>
+                			
+                			<p:outputPanel style="margin-bottom:10px;">
+	                			<p:commandButton value="Filtrar" actionListener="#{visitController.filterVisits}" update=":f1:dataList" />
+	                			<p:commandButton value="Cancelar" actionListener="#{visitController.filterVisitsCancel}" update=":f1" />
+                			</p:outputPanel>
+                		</h:panelGrid>
+					</p:panel>
+				</div>
+			</div>	
+			<!-- FIN FILTRO  -->
+			
+			<!-- INICIO DE LISTADO -->
+			<div class="ui-g-12">
+                <div class="card card-w-title">
+                        <!-- <p:dataScroller id="dataList" value="#{visitController.visits}" var="item" chunkSize="5" > -->
+						<p:dataList value="#{visitController.visits}" id="dataList" var="item" type="unordered" itemType="none" paginator="true" rows="4" styleClass="cars-datalist">
+						
+						<!-- <p:carousel id="dataList" value="#{visitController.visits}" headerText="Listado de visitas" var="item" itemStyle="padding: 14px" responsive="true"> -->
+						
+					        <f:facet name="header" ><div style="text-align: left; font-size: 16px; font-weight: 700"> Listado de visitas</div> </f:facet>
+					        	<h:panelGrid columns="3" style="width:100%" columnClasses="listado_panel"  styleClass="panel_listado"  >		      		
+						      		<p:outputPanel>
+								 		<p:commandLink  actionListener="#{visitController.view}" update=":f1:VisitEditDialog" oncomplete="PF('visitDialog').show()" >
+								 			<f:setPropertyActionListener value="#{item}" target="#{visitController.edited}" />
+								 			<h:graphicImage value="/resourcesapp/images/eye.png" title="Ver" width="24" height="24"  />
+								 		</p:commandLink>
+								 		<br/>
+								 		<p:commandLink  actionListener="#{visitController.edit}" update=":f1:VisitEditDialog" oncomplete="PF('visitDialog').show()">
+								 			<h:graphicImage value="/resourcesapp/images/edit.png" title="Editar" width="24" height="24"  />
+								 			<f:setPropertyActionListener value="#{item}" target="#{visitController.edited}" />
+								 		</p:commandLink>
+						      		</p:outputPanel>
+						      
+						 			<p:outputPanel>
+						                <h:panelGrid columns="1" cellpadding="5">
+						                    <h:outputText value="#{item.cliente.nombre}" styleClass="lista_titulo"/>
+		                            		<h:outputText value="#{item.cliente.poblacion}"  styleClass="lista_valor"/>
+						                </h:panelGrid>
+						            </p:outputPanel>           
+						            
+						            <p:outputPanel>
+						                <h:panelGrid columns="2" cellpadding="5">
+						                    <h:outputText value="Fecha visita:" styleClass="lista_etiqueta"/>
+						                    <h:outputText value="#{item.fechaFormateada}" styleClass="lista_valor"/>
+						 
+						                    <h:outputText value="Proxima visita:" styleClass="lista_etiqueta"/>
+						                    <h:outputText value="#{item.fechaProximaFormateada}" styleClass="lista_valor"/>
+						                </h:panelGrid>
+						            </p:outputPanel>
+						        </h:panelGrid>
+					   <!--  </p:carousel> -->
+					   </p:dataList>
+					  <!-- </p:dataScroller> -->
+					    
+					<!-- </div>
+				</div>  -->   	
+			
+				<!-- DETALLE DEL LISTADO  -->
+				
+				<p:dialog header="Detalle de la visita" widgetVar="visitDialog" responsive="true" modal="true" showEffect="blind" 
+							hideEffect="explode" resizable="false" style="overflow: scroll; max-height: 100%;" >
+				
+					<h:panelGroup id="VisitEditDialog"  >
+					
+					<p:panel>
+						<p:outputPanel style="margin-bottom:10px;  min-width: 300px;">
+	               			<p:commandButton value="Guardar" />
+	               			<p:commandButton value="Cancelar" />
+	              		</p:outputPanel>
+              		</p:panel>
+            			
+            	
+            			
+            		<p:panel id="customerData" header="Cliente" styleClass="panel_edicion" rendered="#{visitController.selected != null}" >
+            			<!-- <p:panelGrid columns="1" styleClass="form-group ui-panelgrid-blank"> -->
+            			<p:panelGrid columns="4" columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4" 
+                            				layout="grid" styleClass="ui-panelgrid-blank form-group" 
+                            				style="border:0px none; background-color:transparent;">
+            				<!-- <p:outputPanel> -->
+            					<h:outputText id="cliente_nombre" value="#{visitController.selected.cliente.nombreCompleto}" title="Cliente" styleClass="lista_titulo" />		
+            					<h:graphicImage rendered="#{visitController.selected.cliente.esPrescriptor == '1'}" value="/resources/images/prescriptor.png" title="Es prescriptor" width="20" height="20" style="margin-left:25px" />
+            				<!-- </p:outputPanel>
+            				<p:outputPanel> -->
+            						<h:outputText id="cliente_localidad" value="#{visitController.selected.cliente.poblacion}" title="Localidad del cliente" styleClass="lista_valor" />
+            						<h:outputText id="cliente_telefono" value="#{visitController.selected.cliente.telefono}" title="telefono"  styleClass="lista_valor" /> 
+            				<!-- </p:outputPanel>
+            				<p:outputPanel> -->
+            						<h:outputText id="cliente_descripcion" value="#{visitController.selected.cliente.descripcion}" title="descripcion"  styleClass="lista_etiqueta"/>
+            				<!-- </p:outputPanel>
+            				<p:outputPanel> -->
+            						<p:commandLink value="Selección de cliente" onclick="showDisplay('f1:clienteEdit')" />
+            						<p:commandButton value="Seleccionar cliente" />
+            						<p:selectOneListbox id="clienteEdit" value="#{visitController.selected.cliente}" converter="customerConverter" var="t" filter="true" filterMatchMode="contains" style="display:none" >
+							             <p:ajax listener="#{visitController.selectCustomerOnEdit}" update="f1:customerData" />
+							            <f:selectItems value="#{visitController.customers}" var="customer" itemLabel="#{customer.nombrePoblacion}" itemValue="#{customer}" />
+							            <p:column>
+							                <h:outputText value="#{t.nombrePoblacion}" />
+							            </p:column>
+							        </p:selectOneListbox>	
+            				<!-- </p:outputPanel> -->
+            			</p:panelGrid>
+            		</p:panel>
+            		
+            		<p:panel header="Detalles visita" styleClass="panel_edicion" rendered="#{visitController.selected != null}" >
+            			<p:panelGrid columns="1" styleClass="form-group ui-panelgrid-blank">
+            				<p:outputLabel value="Descripcion:" for="descripcion" />
+            				<p:inputTextarea id="descripcion" value="#{visitController.selected.descripcion}" title="Descripcion">
+	            				 <p:ajax event="blur" />
+	            			</p:inputTextarea>
+            		
+	            			<p:outputLabel value="Fecha:" for="fecha" />
+	            			<p:calendar id="fecha" value="#{visitController.selected.fecha}" pattern="MM/dd/yyyy HH:mm" showOn="button" >
+	            				<p:ajax event="dateSelect" />
+	            			</p:calendar>
+            		
+	            			<p:outputLabel value="Proxima visita:" for="fechaProxima" />
+	            			<p:calendar id="fechaProxima" value="#{visitController.selected.fechaProxima}" pattern="MM/dd/yyyy HH:mm" showOn="button" >
+	            				<p:ajax event="dateSelect" />
+	            			</p:calendar>
+	            			
+	            			
+            			</p:panelGrid>
+            		</p:panel>
+            		
+            		<p:panelGrid columns="1"  styleClass="form-group ui-panelgrid-blank" rendered="#{visitController.selected != null}">
+                        <ui:repeat value="#{visitController.properties}" var="pro" varStatus="loop">
+                        	<p:panel id="panel#{loop.index}" header="#{pro.propiedad}" styleClass="form-group ui-panelgrid-blank panel_edicion" >
+	                        	
+	                        	<p:inputText id="valorProperty#{loop.index}" value="#{visitController.propertyValue[loop.index]}" title="#{pro.propiedad}" />
+	                        	
+	                        	<p:commandButton id="add#{loop.index}" 		update="@form" 		action="#{visitController.addProperty(pro.propiedad)}"   icon="ui-icon-plus" title="Icon Only" />
+	                        	<p:commandButton id="delete#{loop.index}" 	update="@parent" 	action="#{visitController.deleteProperty(pro.propiedad)}" icon="ui-icon-close" title="eliminar"  />							
+	                        	
+	                        	<p:dataList id="tableProperties#{loop.index}" var="item" value="#{visitController.getVisitPropertyValues(pro.propiedad)}" emptyMessage="">
+	                        		<p:column>
+	                        			<h:outputText value="#{item.valor}"/>
+	                        		</p:column>
+	                        		<p:column>
+	                        			 <p:selectBooleanCheckbox value="#{item.selected}"  />
+	                        		</p:column>
+	                        	</p:dataList>
+                        	</p:panel>
+                        </ui:repeat>
+                 	</p:panelGrid>
+                 	
+                </h:panelGroup>
+			
+                </p:dialog>
+			</div>
+            
+            </div>   
+			
+			<!-- FIN FORMULARIO -->
+                
+            
+        </div>
+        </h:form>
+    </ui:define>
+
+</ui:composition>
