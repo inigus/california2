@@ -1,0 +1,119 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+
+
+<ui:composition>
+			
+       		<h:form id="VisitEditForm">
+       		
+       		
+       		<!-- p:panelGrid style="width:100%" >
+       			<p:row>
+       				<p:column><h:outputText value="1.1" style="margin-left: 20px"/></p:column>
+       				<p:column><h:outputText value="1.2"/></p:column>
+       			</p:row>
+       			<p:row>
+       				<p:column>2.1</p:column>
+       				<p:column>2.2</p:column>
+       			</p:row>
+       			<p:row>
+       				<p:column>3.1</p:column>
+       				<p:column>3.2</p:column>
+       			</p:row>
+       		</p:panelGrid-->
+       		
+            
+            <h:panelGroup id="VisitEditDialog"  >
+            		<p:panel id="customerData" header="Cliente" styleClass="panel_edicion" rendered="#{visitController.selected != null}" >
+            			
+            			<p:panelGrid>
+            				<p:row>
+            					<p:column style="width: 300px">
+            						<h:outputText id="cliente_nombre" value="#{visitController.selected.cliente.nombreCompleto}" title="Cliente" styleClass="lista_titulo" />		
+            						<h:graphicImage rendered="#{visitController.selected.cliente.esPrescriptor == '1'}" value="/resources/images/prescriptor.png" title="Es prescriptor" width="20" height="20" style="margin-left:25px" />
+            					</p:column>
+            					<p:column>
+            						<p:commandLink value="Selección de cliente" onclick="showDisplay('VisitEditForm:clienteEdit')"></p:commandLink>
+            					</p:column>
+            				</p:row>
+            				
+            				<p:row>
+            					<p:column>
+            						<h:outputText id="cliente_localidad" value="#{visitController.selected.cliente.poblacion}" title="Localidad del cliente" styleClass="lista_valor" />
+            						<h:outputText id="cliente_telefono" value="#{visitController.selected.cliente.telefono}" title="telefono"  styleClass="lista_valor" /> 
+            					</p:column>
+            					
+            					<p:column rowspan="2">
+            						<p:selectOneListbox id="clienteEdit" value="#{visitController.selected.cliente}" converter="customerConverter" var="t" filter="true" filterMatchMode="contains" style="display:none" >
+							             <p:ajax listener="#{visitController.selectCustomerOnEdit}" update="VisitEditForm:customerData" />
+							            <f:selectItems value="#{visitController.customers}" var="customer" itemLabel="#{customer.nombrePoblacion}" itemValue="#{customer}" />
+							            <p:column>
+							                <h:outputText value="#{t.nombrePoblacion}" />
+							            </p:column>
+							        </p:selectOneListbox>	
+            					</p:column>
+            				</p:row>
+            				
+            				<p:row>
+            					<p:column>
+            						<h:outputText id="cliente_descripcion" value="#{visitController.selected.cliente.descripcion}" title="descripcion"  styleClass="lista_etiqueta"/>
+            					</p:column>
+            				</p:row>
+            				
+            			</p:panelGrid>
+						
+            		</p:panel>
+            		
+            		<p:panel header="Detalles visita" styleClass="panel_edicion" rendered="#{visitController.selected != null}" >
+            		
+            			<p:outputLabel value="Descripcion:" for="descripcion" />
+            			<p:inputTextarea id="descripcion" value="#{visitController.selected.descripcion}" title="Descripcion">
+            				 <p:ajax event="blur" />
+            			</p:inputTextarea>
+            		
+            			<br/>
+            			<p:outputLabel value="Fecha:" for="fecha" />
+            			<p:calendar id="fecha" value="#{visitController.selected.fecha}" pattern="MM/dd/yyyy HH:mm" showOn="button" >
+            				<p:ajax event="dateSelect" />
+            			</p:calendar>
+            		
+            			<br/>
+            			<p:outputLabel value="Proxima visita:" for="fechaProxima" />
+            			<p:calendar id="fechaProxima" value="#{visitController.selected.fechaProxima}" pattern="MM/dd/yyyy HH:mm" showOn="button" >
+            				<p:ajax event="dateSelect" />
+            			</p:calendar>
+            		
+            		</p:panel>
+            		
+            
+                    <p:panelGrid columns="1" rendered="#{visitController.selected != null}">
+   
+                        <ui:repeat value="#{visitController.properties}" var="pro" varStatus="loop">
+                        	<p:panel id="panel#{loop.index}" header="#{pro.propiedad}" styleClass="panel_edicion" >
+	                        	
+	                        	<p:inputText id="valorProperty#{loop.index}" value="#{visitController.propertyValue[loop.index]}" title="#{pro.propiedad}" />
+	                        	
+	                        	<p:commandButton id="add#{loop.index}" 		update="@form" 		action="#{visitController.addProperty(pro.propiedad)}"   icon="ui-icon-plus" title="Icon Only" />
+	                        	<p:commandButton id="delete#{loop.index}" 	update="@parent" 	action="#{visitController.deleteProperty(pro.propiedad)}" icon="ui-icon-close" title="eliminar"  />							
+	                        	
+	                        	<p:dataList id="tableProperties#{loop.index}" var="item" value="#{visitController.getVisitPropertyValues(pro.propiedad)}" emptyMessage="">
+	                        		<p:column>
+	                        			<h:outputText value="#{item.valor}"/>
+	                        		</p:column>
+	                        		<p:column>
+	                        			 <p:selectBooleanCheckbox value="#{item.selected}"  />
+	                        		</p:column>
+	                        	</p:dataList>
+                        	</p:panel>
+                        </ui:repeat>
+                	
+                 	</p:panelGrid>
+                 	
+                </h:panelGroup>
+            </h:form>
+</ui:composition>
+</html>

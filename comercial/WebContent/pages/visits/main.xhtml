@@ -1,0 +1,68 @@
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+
+	<ui:composition template="/template2.xhtml">
+		
+		
+		<ui:define name="botonera">
+			<h:form id="buttonsForm">	   
+			 	<p:toolbar id="buttons">
+			        <f:facet name="left">
+			            <p:commandButton type="button" ajax="false" value="Filtro" onclick="showDisplay('VisitListForm:panelVisitFilter')" icon="ui-icon-folder-open" disabled="#{visitController.disabledFilterButton}" />
+			 			<p:menuButton value="Ordenar por" disabled="#{visitController.disabledOrderButton}">
+			                <p:menuitem value="Cliente A-Z" actionListener="#{visitController.save}"  icon="ui-icon-disk" />
+			                <p:menuitem value="Cliente Z-A" actionListener="#{visitController.save}"  icon="ui-icon-disk" />
+			                <p:menuitem value="Poblacion A-Z" actionListener="#{visitController.save}"  icon="ui-icon-disk" />
+			                <p:menuitem value="Poblacion Z-A" actionListener="#{visitController.save}"  icon="ui-icon-disk" />
+			                <p:menuitem value="Fecha A-Z" actionListener="#{visitController.save}"  icon="ui-icon-disk" />
+			                <p:menuitem value="Fecha Z-A" actionListener="#{visitController.save}"  icon="ui-icon-disk" />
+			                <p:menuitem value="Proxima Visita A-Z" actionListener="#{visitController.save}"  icon="ui-icon-disk" />
+			                <p:menuitem value="Proxima Visita Z-A" actionListener="#{visitController.save}"  icon="ui-icon-disk" />
+			            </p:menuButton>
+			 
+			            <span class="ui-separator">
+			                <span class="ui-icon ui-icon-grip-dotted-vertical" />
+			            </span>
+			 			<p:commandButton value="Nuevo" 	actionListener="#{visitController.create}" 	 update="buttonsForm:buttons, :VisitEditForm" 					disabled="#{visitController.disabledNewButton}" icon="ui-icon-document"/>
+			            <p:commandButton value="Guardar" actionListener="#{visitController.save}" 	 update="buttonsForm:buttons, :VisitEditForm, :VisitListForm"  	disabled="#{visitController.disabledSaveButton}" icon="ui-icon-disk"/>
+			            <p:commandButton value="Eliminar" actionListener="#{visitController.remove}" update="buttonsForm:buttons, :VisitEditForm, :VisitListForm"   disabled="#{visitController.disabledDeleteButton}" icon="ui-icon-trash"/>
+			            <p:commandButton value="Cancelar" actionListener="#{visitController.cancel}" update="buttonsForm:buttons, :VisitEditForm" 					disabled="#{visitController.disabledCancelButton}"  icon="ui-icon-close" title="Cancelar"/>
+			        </f:facet>
+			 
+			        <f:facet name="right">
+			            <p:menuButton value="Options">
+			                <p:menuitem value="Save" actionListener="#{visitController.save}"  icon="ui-icon-disk" />
+			                <p:menuitem value="Delete" actionListener="#{visitController.remove}" ajax="false" icon="ui-icon-close" />
+			            </p:menuButton>
+			        </f:facet>
+			    </p:toolbar>
+			</h:form>
+		</ui:define>
+	
+		<ui:define name="title">
+			<h:outputText value=":: Mantenimiento de Visitas ::"></h:outputText>
+		</ui:define>
+	
+		<ui:define name="listado">
+			<ui:include src="listado.xhtml" />
+		</ui:define>
+		
+		<ui:define name="editor">
+			<ui:include src="edit.xhtml" />
+		</ui:define>
+		
+		<!-- 
+		<ui:define name="customer_dialog">
+			<ui:include src="../customers/listadoDialog.xhtml" />
+		</ui:define>
+		 -->
+	
+	</ui:composition>
+
+</html>
+

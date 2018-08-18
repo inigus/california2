@@ -1,0 +1,75 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+
+   		
+		<h:form id="CustomerListForm">
+               <h:panelGroup id="customerSelection" rendered="#{visitController.showCustomerListForm}">
+                    <p:dataTable id="datalistCustomer" value="#{customerController.customers}" 
+                    			var="item"
+                                 selectionMode="single" selection="#{customerController.selected}"
+                                 paginator="true"
+                                 rowKey="#{item.idCliente}"
+                                 rows="3"
+                                 rowsPerPageTemplate="10,20,30,40,50"
+                                 >											   
+                        <p:ajax event="rowSelect"  listener="#{visitController.selectCustomer}" 
+                        		update="@all" />
+                        
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="#{bundle.ListCustomerTitle_customerId}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.idCliente}"/>
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="nombre"/>
+                            </f:facet>
+                            <h:outputText value="#{item.nombre}"/>
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="apellidos"/>
+                            </f:facet>
+                            <p:cellEditor>
+                                <f:facet name="output">
+                                    <h:outputText value="#{item.apellidos}"/>
+                                </f:facet>
+                                <f:facet name="input">
+                                    <p:inputText value="#{item.apellidos}"/>
+                                </f:facet>
+                            </p:cellEditor>
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="poblacion"/>
+                            </f:facet>
+                            <h:outputText value="#{item.poblacion}"/>
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="descripcion"/>
+                            </f:facet>
+                            <h:outputText value="#{item.descripcion}"/>
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="es_prescriptor"/>
+                            </f:facet>
+                            <h:outputText value="#{item.esPrescriptor}"/>
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="fecha_alta"/>
+                            </f:facet>
+                            <h:outputText value="#{item.fechaAlta}"/>
+                        </p:column>
+                    </p:dataTable>
+                </h:panelGroup>
+            </h:form>
+              
+</html>            

@@ -1,0 +1,46 @@
+
+<persistence xmlns="http://java.sun.com/xml/ns/persistence"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/persistence
+       http://java.sun.com/xml/ns/persistence/persistence_2_0.xsd"
+	version="2.0">
+
+	<persistence-unit name="comercial"  >
+
+		<!-- provedor/implementacao do JPA -->
+		<provider>org.hibernate.ejb.HibernatePersistence</provider>
+		 <!-- provider>org.eclipse.persistence.jpa.PersistenceProvider</provider-->
+
+		<class>com.comercial.model.Customer</class>
+		<class>com.comercial.model.Property</class>
+		<class>com.comercial.model.Visit</class>
+		<class>com.comercial.model.VisitProperty</class>
+		
+		<class>CCC.Cliente</class>
+		<class>CCC.Producto</class>
+		<class>CCC.Factura</class>
+		<class>CCC.LineaFactura</class>
+		
+		<class>AAA.model.Book</class>
+		<class>AAA.model.BookPublisher</class>
+		<class>AAA.model.Publisher</class>
+
+		<properties>
+
+			<property name="javax.persistence.jdbc.driver" value="com.mysql.jdbc.Driver" />
+
+			<property name="javax.persistence.jdbc.url" value="jdbc:mysql://localhost/comercial" />
+			<property name="javax.persistence.jdbc.user" value="comercial" />
+			<property name="javax.persistence.jdbc.password" value="12345" />
+
+			<property name="hibernate.dialect" value="org.hibernate.dialect.MySQL5InnoDBDialect" />
+
+			<property name="hibernate.show_sql" value="true" />
+			<property name="hibernate.format_sql" value="true" />
+
+			<property name="hibernate.hbm2ddl.auto" value="update" />
+
+
+		</properties>
+	</persistence-unit>
+</persistence>

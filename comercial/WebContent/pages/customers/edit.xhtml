@@ -1,0 +1,50 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+
+        <p:dialog id="CustomerEditDlg" widgetVar="CustomerEditDialog" modal="true" resizable="true" appendTo="@(body)" header="#{bundle.EditCustomerTitle}">
+            <h:form id="CustomerEditForm">
+                <h:panelGroup id="display">
+                    <p:panelGrid columns="2" rendered="#{customerController.selected != null}">
+                        <p:outputLabel value="ID" for="ID" />
+                        <p:inputText id="ID" value="#{customerController.selected.idCliente}" title="#{bundle.EditCustomerTitle_customerId}" disabled="true"/>
+                        
+                        <p:outputLabel value="nombre" for="nombre" />
+                        <p:inputText id="nombre" value="#{customerController.selected.nombre}" title="#{bundle.EditCustomerTitle_name}" />
+                        
+                        <p:outputLabel value="apellidos" for="apellidos" />
+                        <p:inputText id="apellidos" value="#{customerController.selected.apellidos}" title="#{bundle.EditCustomerTitle_addressline1}" />
+                        
+                        <p:outputLabel value="poblacion" for="poblacion" />
+                        <p:inputText id="poblacion" value="#{customerController.selected.poblacion}" title="#{bundle.EditCustomerTitle_addressline2}" />
+                        
+                        <p:outputLabel value="telefono" for="telefono" />
+                        <p:inputText id="telefono" value="#{customerController.selected.telefono}" title="#{bundle.EditCustomerTitle_city}" />
+                        
+                        <p:outputLabel value="email" for="email" />
+                        <p:inputText id="email" value="#{customerController.selected.mail}" title="#{bundle.EditCustomerTitle_state}" />
+                        
+                        <p:outputLabel value="descripcion" for="descripcion" />
+                        <p:inputTextarea id="descripcion" value="#{customerController.selected.descripcion}" title="descripcion" ></p:inputTextarea>
+                        
+                        <p:outputLabel value="es_prescriptor" for="esPrescriptor" />
+                        <p:selectBooleanCheckbox id="esPrescriptor" value="#{customerController.selected.esPrescriptorBoolean}" title="es_prescriptor" />
+                        
+                   		<p:outputLabel value="fecha_alta" for="fechaAlta" />
+                        <p:inputText id="fechaAlta" value="#{customerController.selected.fechaAlta}" title="fecha_alta" disabled="true">
+                        	<f:convertDateTime pattern="yyyy-MM-dd hh:mm:ss"/>
+                        </p:inputText>
+                     <p:commandButton  value="Guardar" actionListener="#{customerController.save}" update="display,:CustomerListForm:datalist,:growl"  oncomplete="handleSubmit(args, 'CustomerEditDialog');" />
+                     <p:commandButton value="Cancelar"  actionListener="#{customerController.cancel}" oncomplete="PF('CustomerEditDialog').hide()"/>
+                
+                 	</p:panelGrid>
+                </h:panelGroup>
+            </h:form>
+        </p:dialog>
+
+    </ui:composition>
+</html>

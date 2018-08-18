@@ -1,0 +1,95 @@
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+    
+    <ui:composition>
+            <h:form id="VisitListForm">
+                
+                <p:messages showDetail="true" autoUpdate="true" closable="true"/>
+                <br/>
+                <p:panel>
+                	
+                		<h:panelGrid id="panelVisitFilter" columns="2" style="display:none">
+                			<p:outputPanel>
+	                			<h:outputLabel value="Fecha desde:" for="fechaDesdeFilter" />
+	                			<br/>
+	                			<p:calendar id="fechaDesdeFilter" value="#{visitController.filter.fechaDesde}"  pattern="MM/dd/yyyy" showOn="button" />
+	                			<br/>
+	                			<h:outputLabel value="Fecha hasta:" for="fechaHastaFilter" />
+	                			<br/>
+	                			<p:calendar id="fechaHastaFilter" value="#{visitController.filter.fechaHasta}" pattern="MM/dd/yyyy" showOn="button" />
+                			</p:outputPanel>
+                			<p:outputPanel>
+	                			<h:outputLabel value="Clientes" for="clienteFilter" />      			
+	                			<p:selectOneListbox id="clienteFilter" value="#{visitController.filter.cliente}" converter="customerConverter" var="t" filter="true" filterMatchMode="contains" >
+						             <p:ajax listener="#{visitController.selectCustomerOnFilter}"  />
+						            <f:selectItems value="#{visitController.customers}" var="customer" itemLabel="#{customer.nombrePoblacion}" itemValue="#{customer}" />
+						            <p:column>
+						                <h:outputText value="#{t.nombrePoblacion}" />
+						            </p:column>
+						        </p:selectOneListbox>
+						        
+                			</p:outputPanel>
+                			
+                			<p:outputPanel>
+	                			<p:commandButton value="Filtrar" actionListener="#{visitController.filterVisits}" update=":VisitListForm:dataList" />
+	                			<p:commandButton value="Cancelar" actionListener="#{visitController.filterVisitsCancel}" update=":VisitListForm" />
+                			</p:outputPanel>
+                		</h:panelGrid>
+
+                
+					    <p:dataScroller id="dataList" value="#{visitController.visits}" var="item" chunkSize="10"  >
+					        <f:facet name="header">
+					            Listado de visitas
+					        </f:facet>
+					 		
+						        <h:panelGrid columns="3" style="width:100%" columnClasses="listado_panel"  styleClass="panel_listado"  >
+						      		
+						      		<p:outputPanel>
+								 		<p:commandLink  actionListener="#{visitController.view}" update=":VisitEditForm:VisitEditDialog, :buttonsForm:buttons">
+								 			<f:setPropertyActionListener value="#{item}" target="#{visitController.edited}" />
+								 			<h:graphicImage value="/resources/images/eye.png" title="Ver" width="24" height="24"  />
+								 		</p:commandLink>
+								 		<br/>
+								 		<p:commandLink  actionListener="#{visitController.edit}" update=":VisitEditForm:VisitEditDialog, :buttonsForm:buttons">
+								 			<h:graphicImage value="/resources/images/edit.png" title="Editar" width="24" height="24"  />
+								 			<f:setPropertyActionListener value="#{item}" target="#{visitController.edited}" />
+								 		</p:commandLink>
+						      		</p:outputPanel>
+						      
+						 			<p:outputPanel>
+						                <h:panelGrid columns="1" cellpadding="5">
+						                    <h:outputText value="#{item.cliente.nombre}" styleClass="lista_titulo"/>
+		                            		<h:outputText value="#{item.cliente.poblacion}"  styleClass="lista_valor"/>
+						                </h:panelGrid>
+						            </p:outputPanel>           
+						            
+						            <p:outputPanel>
+						                <h:panelGrid columns="2" cellpadding="5">
+						                    <h:outputText value="Fecha visita:" styleClass="lista_etiqueta"/>
+						                    <h:outputText value="#{item.fechaFormateada}" styleClass="lista_valor"/>
+						 
+						                    <h:outputText value="Proxima visita:" styleClass="lista_etiqueta"/>
+						                    <h:outputText value="#{item.fechaProximaFormateada}" styleClass="lista_valor"/>
+						                </h:panelGrid>
+						            </p:outputPanel>
+						            
+						        </h:panelGrid>
+					        
+					    </p:dataScroller>
+			
+                </p:panel>
+                
+                
+                
+              
+            </h:form>
+             
+                            
+    </ui:composition>
+
+</html>
+

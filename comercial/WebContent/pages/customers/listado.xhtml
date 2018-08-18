@@ -1,0 +1,103 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+ <ui:composition>
+		<h:form id="CustomerListForm">
+                <p:messages showDetail="true" autoUpdate="true" closable="true"/>
+                <br/>
+                <p:panel header="#{bundle.ListCustomerTitle}">
+                    <p:dataTable id="datalist" value="#{customerController.customers}" 
+                    			var="item"
+                                 selectionMode="single" selection="#{customerController.selected}"
+                                 editable="true" 
+                                 editMode="cell"
+                                 paginator="true"
+                                 rowKey="#{item.idCliente}"
+                                 rows="3"
+                                 rowsPerPageTemplate="10,20,30,40,50"
+                                 >
+
+                        <p:ajax event="rowSelect"   update="createButton viewButton editButton deleteButton"/>
+                        <p:ajax event="rowUnselect" update="createButton viewButton editButton deleteButton"/>
+                        <p:ajax event="cellEdit" listener="#{customerController.onCellEdit}" />  
+ 
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="#{bundle.ListCustomerTitle_customerId}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.idCliente}"/>
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="nombre"/>
+                            </f:facet>
+                            <h:outputText value="#{item.nombre}"/>
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="apellidos"/>
+                            </f:facet>
+                            <p:cellEditor>
+                                <f:facet name="output">
+                                    <h:outputText value="#{item.apellidos}"/>
+                                </f:facet>
+                                <f:facet name="input">
+                                    <p:inputText value="#{item.apellidos}"/>
+                                </f:facet>
+                            </p:cellEditor>
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="poblacion"/>
+                            </f:facet>
+                            <h:outputText value="#{item.poblacion}"/>
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="telefono"/>
+                            </f:facet>
+                            <h:outputText value="#{item.telefono}"/>
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="email"/>
+                            </f:facet>
+                            <h:outputText value="#{item.mail}"/>
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="descripcion"/>
+                            </f:facet>
+                            <h:outputText value="#{item.descripcion}"/>
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="es_prescriptor"/>
+                            </f:facet>
+                            <h:outputText value="#{item.esPrescriptor}"/>
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="fecha_alta"/>
+                            </f:facet>
+                            <h:outputText value="#{item.fechaAlta}"/>
+                        </p:column>
+					
+                        <f:facet name="footer">
+                            <p:commandButton id="createButton" icon="ui-icon-plus"   value="Nuevo" update=":CustomerEditForm" oncomplete="PF('CustomerEditDialog').show()" actionListener="#{customerController.prepareCreate}"  />
+                            <p:commandButton id="viewButton"   icon="ui-icon-search" value="Ver" update=":CustomerEditForm" oncomplete="PF('CustomerEditDialog').show()" disabled="#{empty customerController.selected}"/>
+                            <p:commandButton id="editButton"   icon="ui-icon-pencil" value="Editar" update=":CustomerEditForm" oncomplete="PF('CustomerEditDialog').show()" disabled="#{empty customerController.selected}"/>
+                            <p:commandButton id="deleteButton" icon="ui-icon-trash"  value="Eliminar" update=":growl,datalist" actionListener="#{customerController.delete}" disabled="#{empty customerController.selected}"/>
+                        </f:facet>
+                    </p:dataTable>
+
+                </p:panel>
+
+            </h:form>
+
+ 		</ui:composition>            
+            
+</html>            
