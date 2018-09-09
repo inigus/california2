@@ -15,13 +15,13 @@ public class UserDaoImpl extends BaseDao implements UserDao {
 	}
 	
 	@Override
-	public User getUser(String nameUser, String password) {
+	public User getUser(String mail, String password) {
 
 		try {
 			User user = (User) em
 					.createQuery(
-							"SELECT u from User u where u.nameUser = :name and u.password = :password")
-					.setParameter("name", nameUser)
+							"SELECT u from User u where u.mail = :mail and u.password = :password")
+					.setParameter("mail", mail)
 					.setParameter("password", password).getSingleResult();
 
 			return user;

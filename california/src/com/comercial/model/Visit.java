@@ -140,6 +140,20 @@ public class Visit implements Serializable {
 	public void setCompra(String compra) {
 		this.compra = compra;
 	}
+	
+	public boolean getEsCompraBoolean() {
+		if (this.getCompra()!=null && this.getCompra().equalsIgnoreCase("1")) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+	public void setEsCompraBoolean(boolean es) {
+		this.compra = "0";
+		if (es) {
+			this.compra = "1";
+		}
+	}
 
 
 	public List<VisitProperty> getPropiedadesVisita() {
@@ -189,6 +203,8 @@ public class Visit implements Serializable {
 	public void setFechaProximaHasta(Date fechaProximaHasta) {
 		this.fechaProximaHasta = fechaProximaHasta;
 	}
+	
+	
 
 
 	@Override

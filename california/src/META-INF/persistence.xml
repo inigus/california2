@@ -16,6 +16,8 @@
 		<class>com.comercial.model.Visit</class>
 		<class>com.comercial.model.VisitProperty</class>
 		
+		<class>com.comercial.model.User</class>
+		
 <!-- 		<class>CCC.Cliente</class>
 		<class>CCC.Producto</class>
 		<class>CCC.Factura</class>

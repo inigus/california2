@@ -4,12 +4,16 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import com.comercial.data.UserDao;
+import com.comercial.data.UserDaoImpl;
+import com.comercial.data.VisitDao;
+import com.comercial.data.VisitDaoImpl;
 import com.comercial.model.User;
 
-public class UserServiceImpl implements UserService {
+public class UserServiceImpl extends BaseService  implements UserService {
 	
 	
-	//@Inject
+	private UserDao userDao = new UserDaoImpl(this.em);
 
 	
 	
@@ -25,10 +29,9 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public User loginUser(User user) {
 		
+		User userValidated = userDao.getUser(user.getMail(), user.getPassword());
 		
-		user.setLastAccess(new Date() );
-		
-		return user;
+		return userValidated;
 	}
 	
 

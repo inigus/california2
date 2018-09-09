@@ -23,6 +23,7 @@
 <p:graphicImage styleClass="login-image" name="images/image-login.png" library="california-layout" />
 
 <h:body styleClass="login-body">
+	 <h:form id="f1">
     <div class="login-panel ui-fluid">
         <div class="ui-g">
             <div class="ui-g-12 login-icon-container">
@@ -36,11 +37,11 @@
             </div>
             <div class="ui-g-12 ui-lg-12 ui-md-12">
                 <h:outputText value="E-mail address" />
-                <p:inputText placeholder="Email" />
+                <p:inputText value="#{login.user.mail}" placeholder="Email" />
             </div>
             <div class="ui-g-12 ui-lg-12 ui-md-12">
                 <h:outputText value="Password" />
-                <p:password placeholder="Password" feedback="false" />
+                <p:password value="#{login.user.password}" placeholder="Password" feedback="false" />
             </div>
             <div class="ui-g-12 ui-lg-12 ui-md-12 chkbox-container">
                 <p:selectBooleanCheckbox id="remember-me" />
@@ -48,13 +49,13 @@
                 <a href="#">Reset Password</a>
             </div>
             <div class="ui-g-12 ui-lg-12 ui-md-12 button-container">
-                <p:button outcome="/dashboard" value="Sign in" styleClass="turquoise-btn" />
-
+                <p:commandButton value="Sign in" action="#{login.loginUser}"  styleClass="turquoise-btn" />
             </div>
         </div>
     </div>
 
     <h:outputStylesheet name="css/layout-#{guestPreferences.theme}.css" library="california-layout" />
+    </h:form>
 </h:body>
 
 </html>

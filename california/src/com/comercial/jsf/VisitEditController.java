@@ -13,10 +13,7 @@ import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
 import javax.faces.event.ValueChangeEvent;
-
-import org.primefaces.context.RequestContext;
-import org.primefaces.event.SelectEvent;
-
+import javax.servlet.http.HttpSession;
 
 import com.comercial.model.Customer;
 import com.comercial.model.Property;
@@ -32,7 +29,7 @@ import com.comercial.utils.K;
 
 @ManagedBean(name = "visitEdit")
 @ViewScoped
-public class VisitEditController {
+public class VisitEditController extends Controller {
 	
 	
 	@ManagedProperty(value="#{customerController}")
@@ -55,7 +52,7 @@ public class VisitEditController {
 	
 	private String[] propertyValue;
 	
-	private Map<String, Integer> mPropiedadIndex = new HashMap<String, Integer>();
+	private Map<String, Integer> mPropertyIndex = new HashMap<String, Integer>();
 
 	private VisitService visitService = new VisitServiceImpl();
 	
@@ -75,33 +72,44 @@ public class VisitEditController {
 	
 	private List<Customer> customers;
 
+	private List<VisitProperty> listPropertiesSelected = new ArrayList<>();
+
 	
-   @PostConstruct
+
+	@PostConstruct
     public void init() {       
         // Remember already saved result from view scoped bean
         System.out.println(" supongo sera como un constructor....");
         
+
+        validateSession();
+        
+
         this.customers = service.getCustomers();
         
         selected = new Visit();
         selected.setCliente(new Customer());
-    }
-	
-	public VisitEditController() {
-		// TODO Auto-generated method stub
-
-		this.visits = this.visitService.getVisitsFiltered(filter);
+       
+        // cargar propiedades
+        this.visits = this.visitService.getVisitsFiltered(filter);
 		
 		Property pro = new Property();
 		pro.setEntidad("visita");
 		this.properties = this.proService.getPropertysFiltered(pro);
 		propertyValue = new String[this.properties.size()];
 		
-		int i = 0;
-		for (Property property : properties) {
-			mPropiedadIndex.put(property.getPropiedad(), i++ );
+		int i=0;
+		for (Property prop : properties) {
+			mPropertyIndex.put(prop.getPropiedad(), i++);
 		}
 		
+		System.out.println("Inicializado");
+    }
+	
+
+	
+	public VisitEditController() {
+		// TODO Auto-generated method stub
 	}
 	
 	
@@ -186,7 +194,7 @@ public class VisitEditController {
     
     public void addProperty(String property) {
     	
-    	int index = this.mPropiedadIndex.get(property);
+    	int index = this.mPropertyIndex.get(property);
     	String value = this.propertyValue[index];
     	
     	Property prop = Property.getPropertyByName(properties, property);
@@ -194,10 +202,15 @@ public class VisitEditController {
     	this.propertyValue[index] = "";
     }
     
+    public void selectProperty(ValueChangeEvent event){
+    	
+    	System.out.println("aaaaaaaaaaaaa");
+    }
+    
     public void deleteProperty(String property) {
-    	
+	
     	Property prop = Property.getPropertyByName(properties, property);
-    	
+    
     	for (int i = this.selected.getPropiedadesVisita().size()-1; i>=0; i-- ) {
     		VisitProperty vProp = this.selected.getPropiedadesVisita().get(i);
     		if (vProp.getPropiedad().equals(prop) && vProp.isSelected() ) {
@@ -423,6 +436,14 @@ public class VisitEditController {
 
 	public void setEdited(Visit edited) {
 		this.edited = edited;
+	}
+
+	public List<VisitProperty> getListPropertiesSelected() {
+		return listPropertiesSelected;
+	}
+
+	public void setListPropertiesSelected(List<VisitProperty> listPropertiesSelected) {
+		this.listPropertiesSelected = listPropertiesSelected;
 	}
 
 

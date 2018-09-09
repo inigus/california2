@@ -13,6 +13,15 @@ public class K {
 	public static final String action_save = "save";
 	
 	
+	
+	public static final String page_login = "login.xhtml";
+	public static final String page_index = "empty.xhtml";
+	public static final String page_error = "";
+	
+	public static final String page_visit_new = "visitEdit.xhtml";
+	
+	
+	
 	/**
 	 * Formato de fecha "dd-MM-yyyy HH:mm"
 	 */

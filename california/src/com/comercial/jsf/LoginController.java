@@ -1,13 +1,16 @@
 package com.comercial.jsf;
 
+import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
+import javax.faces.event.ActionEvent;
 
 import com.comercial.model.User;
 import com.comercial.service.UserService;
 import com.comercial.service.UserServiceImpl;
+import com.comercial.utils.K;
    
   @ManagedBean(name = "login")
   @ViewScoped
@@ -17,9 +20,19 @@ import com.comercial.service.UserServiceImpl;
         
         private User user = new User();
         
-        public String send() {
+    	@PostConstruct
+        public void init() {    
+    		
+    		System.out.println("A ver si entro por lo menos");
+    		
+    		this.user.setMail("fernandezarce@gmail.com");
+    		this.user.setPassword("inigo");
+    		
+    	}
+        
+        public String loginUser() {
         	
-        	
+        	this.user.setPassword("inigo");
         	user = userService.loginUser(user);
               
         	if (user==null) {
@@ -30,7 +43,7 @@ import com.comercial.service.UserServiceImpl;
                                        " Login Error!"));
                 return null;
         	} else {
-        		 return "/main.xhtml";
+        		 return K.page_visit_new;
         	}  
         }
    

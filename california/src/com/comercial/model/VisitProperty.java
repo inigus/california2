@@ -100,6 +100,27 @@ public class VisitProperty implements Serializable {
 	public void setSelected(boolean selected) {
 		this.selected = selected;
 	}
+	
+	private static final String sep = "#@#@";
+	public static String toConvertString(VisitProperty obj) {
+		
+		return obj.valor + sep + obj.orden + sep + obj.selected + sep + 
+				obj.propiedad.getIdPropiedad() + sep + obj.propiedad.getPropiedad() + sep + obj.propiedad.getEntidad();
+		
+	}
+	
+	public static VisitProperty fromConvertString(String val) {
+		VisitProperty vp = new VisitProperty();
+		
+		String[] aVal = val.split(sep);
+		vp.setValor(aVal[0]);
+		vp.setOrden(Integer.parseInt(aVal[1]));
+		vp.setSelected(Boolean.getBoolean(aVal[2]));
+		vp.setPropiedad(new Property(Integer.parseInt(aVal[3]),aVal[4],aVal[5]));
+		
+		return vp;
+		
+	}
 
 	@Override
 	public int hashCode() {
