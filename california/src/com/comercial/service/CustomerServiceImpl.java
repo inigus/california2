@@ -46,11 +46,11 @@ public class CustomerServiceImpl  extends BaseService implements CustomerService
 		
 		Customer cus = new Customer();
 		try {
-		this.initTransaction();
-		
-		cus = customerDao.insert(customer);
-		
-		this.finishTransaction();
+			this.initTransaction();
+			
+			cus = customerDao.insert(customer);
+			
+			this.finishTransaction();
 		} catch (Throwable t) {
 			this.finishTransaction(t);
 		}

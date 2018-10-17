@@ -27,7 +27,6 @@ public class CustomerController {
 	public void CustomersControl() {
 		// TODO Auto-generated method stub
 
-		
 		this.customers = this.customerService.getAll();
 	}
 

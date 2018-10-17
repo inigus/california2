@@ -30,37 +30,39 @@
 							            </p:column>
 							        </p:selectOneListbox>
 						        
-						        <p:commandButton value="Editar Cliente" disabled="true" />
-           						<p:commandButton value="Nuevo Cliente" />	
+						        <p:commandButton value="Editar Cliente" disabled="#{visitEdit.bEditCustomer}" />
+           						<p:commandButton value="Nuevo Cliente" actionListener="#{visitEdit.clickNewCustomerBtn}" update="f1" />	
                         	</p:panelGrid>
                         	
                         	<p:panel header="Ver detalle del cliente" toggleable="true" collapsed="true" >
 	                        	<p:panelGrid id="customerData" columns="4" columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4" layout="grid" styleClass="ui-panelgrid-blank form-group" style="border:0px none; background-color:transparent;">
 	                        		<p:outputLabel for="nombre" value="Nombre"/>
-	                                <p:inputText id="nombre" value="#{visitEdit.selected.cliente.nombre}"/>
+	                                <p:inputText id="nombre" value="#{visitEdit.selCustomer.nombre}"/>
 	                                
 	                                <p:outputLabel for="apellidos" value="Apellidos"/>
-	                                <p:inputText id="apellidos" value="#{visitEdit.selected.cliente.apellidos}"/>
+	                                <p:inputText id="apellidos" value="#{visitEdit.selCustomer.apellidos}"/>
 	                        	
 	                        		<p:outputLabel for="poblacion" value="Poblacion"/>
-	                                <p:inputText id="poblacion" value="#{visitEdit.selected.cliente.poblacion}"/>
+	                                <p:inputText id="poblacion" value="#{visitEdit.selCustomer.poblacion}"/>
 	                                
 	                                <p:outputLabel for="telefono" value="Telefono"/>
-	                                <p:inputText id="telefono" value="#{visitEdit.selected.cliente.telefono}"/>
+	                                <p:inputText id="telefono" value="#{visitEdit.selCustomer.telefono}"/>
 	                        	
 	                        		<p:outputLabel for="mail" value="Correo electronico"/>
-	                                <p:inputText id="mail" value="#{visitEdit.selected.cliente.mail}"/>
+	                                <p:inputText id="mail" value="#{visitEdit.selCustomer.mail}"/>
 	                                
 	                                <p:outputLabel for="fechaAlta" value="Fecha Alta"/>
-	                                <p:calendar id="fechaAlta" value="#{visitEdit.selected.cliente.fechaAlta}" pattern="MM/dd/yyyy HH:mm" showOn="button" >
+	                                <p:calendar id="fechaAlta" value="#{visitEdit.selCustomer.fechaAlta}" pattern="MM/dd/yyyy HH:mm" showOn="button" >
 		            					<p:ajax event="dateSelect" />
 		            				</p:calendar>
 		            				
 		            				<p:outputLabel for="descripcion" value="Descripcion"/>
-		            				<p:inputTextarea id="descripcion" value="#{visitEdit.selected.cliente.descripcion}" autoResize="false"/>
+		            				<p:inputTextarea id="descripcion" value="#{visitEdit.selCustomer.descripcion}" autoResize="false"/>
 	                                
 	                                <p:outputLabel for="prescriptor" value="Prescriptor"/>
-	                                <p:selectBooleanButton id="prescriptor" onLabel="Si" offLabel="No" onIcon="ui-icon-check" offIcon="ui-icon-close" value="#{visitEdit.selected.cliente.esPrescriptorBoolean}"/>
+	                                <p:selectBooleanButton id="prescriptor" onLabel="Si" offLabel="No" onIcon="ui-icon-check" offIcon="ui-icon-close" value="#{visitEdit.selCustomer.esPrescriptorBoolean}"/>
+	                        	
+	                        		<p:commandButton value="Guardar Cliente" actionListener="#{visitEdit.clickSaveCustomer}" update="f1" />	
 	                        	</p:panelGrid>
                         	</p:panel>
                     	</div>

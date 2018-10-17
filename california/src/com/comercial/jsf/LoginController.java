@@ -6,6 +6,7 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
+import javax.servlet.http.HttpSession;
 
 import com.comercial.model.User;
 import com.comercial.service.UserService;
@@ -43,7 +44,11 @@ import com.comercial.utils.K;
                                        " Login Error!"));
                 return null;
         	} else {
-        		 return K.page_visit_new;
+        		
+				FacesContext facesContext = FacesContext.getCurrentInstance();
+				HttpSession session = (HttpSession) facesContext.getExternalContext().getSession(true);
+				session.setAttribute(K.session_user, user);
+        		return K.page_visit_new;
         	}  
         }
    

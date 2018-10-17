@@ -21,6 +21,8 @@ public class K {
 	public static final String page_visit_new = "visitEdit.xhtml";
 	
 	
+	public static final String session_user = "user";
+	
 	
 	/**
 	 * Formato de fecha "dd-MM-yyyy HH:mm"

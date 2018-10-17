@@ -33,11 +33,11 @@ public class CharacterEncodingFilter implements Filter {
 	}
 
 	public void init(FilterConfig filterConfig) throws ServletException {
-		
+		System.out.println(" PASANDO POR EL INIT DE SERVLET-FILTER DE CALIFORNIA");
 	}
 	
 	public void destroy() {
-		
+		System.out.println(" PASANDO POR EL DESTROY DE SERVLET-FILTER DE CALIFORNIA");
 	}
 
 

@@ -36,7 +36,7 @@ public class VisitEditController extends Controller {
 	private CustomerController customerController;
 	
 	@ManagedProperty("#{customerService}")
-    private CustomerServiceImpl service;
+    private CustomerServiceImpl customerService;
 	
 	private Visit selected;
 	
@@ -62,6 +62,9 @@ public class VisitEditController extends Controller {
 	
 	private boolean showFilerVisitForm = false;
 	
+	private boolean bEditCustomer= true;
+	
+	private boolean bNewCustomer = false;
 	
 	private boolean disabledFilterButton = false;
 	private boolean disabledOrderButton = true;
@@ -74,18 +77,18 @@ public class VisitEditController extends Controller {
 
 	private List<VisitProperty> listPropertiesSelected = new ArrayList<>();
 
-	
+	private Customer selCustomer = new Customer();
 
 	@PostConstruct
     public void init() {       
         // Remember already saved result from view scoped bean
         System.out.println(" supongo sera como un constructor....");
         
-
+        
         validateSession();
         
 
-        this.customers = service.getCustomers();
+        this.customers = customerService.getCustomers();
         
         selected = new Visit();
         selected.setCliente(new Customer());
@@ -104,6 +107,8 @@ public class VisitEditController extends Controller {
 		}
 		
 		System.out.println("Inicializado");
+		
+//		return "";
     }
 	
 
@@ -255,7 +260,9 @@ public class VisitEditController extends Controller {
 	
     public void selectCustomerOnEdit(){
     	
-    	System.out.println("CLIENTE SELECCIONADO:" + this.selected.getCliente());
+    	System.out.println("CLIENTE SELECCIONADO:" + this.selCustomer );
+    	this.selected.setCliente(selCustomer);
+    	bEditCustomer = true;
     }
     
     public void selectCustomerOnFilter(){
@@ -272,7 +279,25 @@ public class VisitEditController extends Controller {
     	}
     }
     
-
+    public void clickNewCustomerBtn( ActionEvent event ) {
+    	this.bNewCustomer = true;
+    	if (selected.getCliente()==null) {
+    		selected.setCliente(new Customer());
+    	}
+    }
+    
+    
+    public void clickSaveCustomer(ActionEvent event) {
+    	
+    	if (bNewCustomer) {
+    		customerService.insert( selCustomer );
+    		this.selected.setCliente(selCustomer);
+    		bNewCustomer = false;
+    	} else {
+    		customerService.update( selected.getCliente() );
+    	}
+    	
+    }
 	
 
 	public List<Visit> getVisits() {
@@ -366,13 +391,19 @@ public class VisitEditController extends Controller {
 		this.customers = customers;
 	}
 
-	public CustomerServiceImpl getService() {
-		return service;
+	
+
+	public CustomerServiceImpl getCustomerService() {
+		return customerService;
 	}
 
-	public void setService(CustomerServiceImpl service) {
-		this.service = service;
+
+
+	public void setCustomerService(CustomerServiceImpl customerService) {
+		this.customerService = customerService;
 	}
+
+
 
 	public boolean isShowFilerVisitForm() {
 		return showFilerVisitForm;
@@ -444,6 +475,30 @@ public class VisitEditController extends Controller {
 
 	public void setListPropertiesSelected(List<VisitProperty> listPropertiesSelected) {
 		this.listPropertiesSelected = listPropertiesSelected;
+	}
+
+
+
+	public boolean isbEditCustomer() {
+		return bEditCustomer;
+	}
+
+
+
+	public void setbEditCustomer(boolean bEditCustomer) {
+		this.bEditCustomer = bEditCustomer;
+	}
+
+
+
+	public Customer getSelCustomer() {
+		return selCustomer;
+	}
+
+
+
+	public void setSelCustomer(Customer selCustomer) {
+		this.selCustomer = selCustomer;
 	}
 
 
