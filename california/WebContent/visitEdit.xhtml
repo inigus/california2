@@ -23,15 +23,14 @@
                         		
                         		<p:selectOneListbox id="clienteEdit" value="#{visitEdit.selected.cliente}" converter="customerConverter" 
                         							var="t" filter="true" filterMatchMode="contains" >
-							            <p:ajax listener="#{visitEdit.selectCustomerOnEdit}" update="f1:customerData" />
+							            <p:ajax listener="#{visitEdit.selectCustomerOnFilter}" update="f1" />
 							            <f:selectItems value="#{visitEdit.customers}" var="customer" itemLabel="#{customer.nombrePoblacion}" itemValue="#{customer}" />
 							            <p:column>
 							                <h:outputText value="#{t.nombrePoblacion}" />
 							            </p:column>
 							        </p:selectOneListbox>
-						        
-						        <p:commandButton value="Editar Cliente" disabled="#{visitEdit.bEditCustomer}" />
-           						<p:commandButton value="Nuevo Cliente" actionListener="#{visitEdit.clickNewCustomerBtn}" update="f1" />	
+							        
+           						<p:commandButton value="Nuevo Cliente" actionListener="#{visitEdit.clickCustomerNew}" update="f1" />	
                         	</p:panelGrid>
                         	
                         	<p:panel header="Ver detalle del cliente" toggleable="true" collapsed="true" >
@@ -62,7 +61,7 @@
 	                                <p:outputLabel for="prescriptor" value="Prescriptor"/>
 	                                <p:selectBooleanButton id="prescriptor" onLabel="Si" offLabel="No" onIcon="ui-icon-check" offIcon="ui-icon-close" value="#{visitEdit.selCustomer.esPrescriptorBoolean}"/>
 	                        	
-	                        		<p:commandButton value="Guardar Cliente" actionListener="#{visitEdit.clickSaveCustomer}" update="f1" />	
+	                        		<p:commandButton value="Guardar Cliente" actionListener="#{visitEdit.clickCustomerSave}" update="f1" />	
 	                        	</p:panelGrid>
                         	</p:panel>
                     	</div>
@@ -142,11 +141,11 @@
                 	
                 			<p:panelGrid columns="4" columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-4,ui-grid-col-2" layout="grid" styleClass="ui-panelgrid-blank form-group" style="border:0px none; background-color:transparent;">
                         		
-                        		<p:commandButton value="Guardar Visita" actionListener="#{visitEdit.save}" update="f1" />
+                        		<p:commandButton value="Guardar Visita" actionListener="#{visitEdit.clickVisitSave}" update="f1" />
                         		<p:outputPanel></p:outputPanel>
                         		<p:outputPanel></p:outputPanel>
                         		
-           						<p:commandButton value="Cancelar"  actionListener="#{visitEdit.cancel}" update="f1" />	
+           						<p:commandButton value="Cancelar"  actionListener="#{visitEdit.clickVisitCancel}" update="f1" />	
     				
 							</p:panelGrid>
 						</div>

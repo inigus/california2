@@ -38,13 +38,11 @@ public class VisitEditController extends Controller {
 	@ManagedProperty("#{customerService}")
     private CustomerServiceImpl customerService;
 	
+	private VisitService visitService = new VisitServiceImpl();
+	
+	private PropertyService proService = new PropertyServiceImpl();
+	
 	private Visit selected;
-	
-	private Visit edited;
-	
-	private Visit filter = new Visit();
-
-	private List<Visit> visits;
 	
 	private List<Property> properties;
 	
@@ -54,24 +52,8 @@ public class VisitEditController extends Controller {
 	
 	private Map<String, Integer> mPropertyIndex = new HashMap<String, Integer>();
 
-	private VisitService visitService = new VisitServiceImpl();
-	
-	private PropertyService proService = new PropertyServiceImpl();
-	
-	private boolean showCustomerListForm = false;
-	
-	private boolean showFilerVisitForm = false;
-	
 	private boolean bEditCustomer= true;
-	
 	private boolean bNewCustomer = false;
-	
-	private boolean disabledFilterButton = false;
-	private boolean disabledOrderButton = true;
-	private boolean disabledNewButton = false;
-	private boolean disabledSaveButton = true;
-	private boolean disabledDeleteButton = true;
-	private boolean disabledCancelButton = true;
 	
 	private List<Customer> customers;
 
@@ -79,23 +61,20 @@ public class VisitEditController extends Controller {
 
 	private Customer selCustomer = new Customer();
 
+	public VisitEditController() {
+		// TODO Auto-generated method stub
+	}
+	
 	@PostConstruct
     public void init() {       
         // Remember already saved result from view scoped bean
-        System.out.println(" supongo sera como un constructor....");
+		// validateSession();
         
-        
-        validateSession();
-        
-
         this.customers = customerService.getCustomers();
         
         selected = new Visit();
         selected.setCliente(new Customer());
        
-        // cargar propiedades
-        this.visits = this.visitService.getVisitsFiltered(filter);
-		
 		Property pro = new Property();
 		pro.setEntidad("visita");
 		this.properties = this.proService.getPropertysFiltered(pro);
@@ -105,34 +84,9 @@ public class VisitEditController extends Controller {
 		for (Property prop : properties) {
 			mPropertyIndex.put(prop.getPropiedad(), i++);
 		}
-		
-		System.out.println("Inicializado");
-		
-//		return "";
-    }
-	
 
-	
-	public VisitEditController() {
-		// TODO Auto-generated method stub
-	}
-	
-	
-	/*
-	 *  METODOS PARA EL LISTADO
-	 */
-	
-	public void filterVisits(ActionEvent event) {
-		this.visits = this.visitService.getVisitsFiltered(filter);
-    	System.out.println("FILTRADO VISITAS");
     }
-	
-	public void filterVisitsCancel(ActionEvent event) {
-    	this.filter = new Visit();
-		this.visits = this.visitService.getVisitsFiltered(filter);
-    	System.out.println("FILTRADO VISITAS");
-    }
-	
+
     
     public List<VisitProperty> getVisitPropertyValues(String propiedad) {
     	
@@ -144,38 +98,8 @@ public class VisitEditController extends Controller {
 		}
     	return properties;
     }
-    
-    
-    public void edit(ActionEvent event) {
-    	Map<String,Object> req = FacesContext.getCurrentInstance().getExternalContext().getRequestMap();
-    	Visit aux = (Visit)req.get("item");
-    	this.selected = visitService.get( aux.getIdVisita() );  
-    	this.controlToolbarButtons(K.action_edit);
-    }
-    
-    
-    public void view(ActionEvent event) {
-    	Map<String,Object> req = FacesContext.getCurrentInstance().getExternalContext().getRequestMap();
-    	Visit aux = (Visit)req.get("item");
-    	this.selected = visitService.get(aux.getIdVisita());  
-    	this.controlToolbarButtons(K.action_view);
-    }
-    
-    /*
-     * FIN METODOS DEL LISTADO
-     */
-
-
-   /*
-    *  METODOS PARA EL FORMULARIO DE EDICION
-    */
-    
-    public void create (ActionEvent event) {
-    	this.selected = new Visit();
-    	this.controlToolbarButtons(K.action_new);
-    }
-    
-    public void save(ActionEvent event) {
+     
+    public void clickVisitSave(ActionEvent event) {
     	
     	if (selected.getIdVisita() != null) {
     		System.out.println( "CUSTOMER SELECTED(update):" + selected.toString() );
@@ -188,9 +112,8 @@ public class VisitEditController extends Controller {
                 new FacesMessage("Se ha guardado correctamente la visita "));
     }
     
-    public void cancel(ActionEvent event) {
+    public void clickVisitCancel(ActionEvent event) {
     	this.selected = null;
-    	this.controlToolbarButtons(K.action_cancel);
     }
 	
     public void remove(ActionEvent event) {
@@ -208,7 +131,6 @@ public class VisitEditController extends Controller {
     }
     
     public void selectProperty(ValueChangeEvent event){
-    	
     	System.out.println("aaaaaaaaaaaaa");
     }
     
@@ -224,70 +146,17 @@ public class VisitEditController extends Controller {
 		}
     }
     
-    private void controlToolbarButtons(String accion) {
-    	
-    	if (accion.equals(K.action_edit)) {
-    		this.disabledFilterButton = true;
-    		this.disabledOrderButton = true;
-    		this.disabledNewButton = true;
-    		this.disabledSaveButton = false;
-    		this.disabledDeleteButton = false;
-    		this.disabledCancelButton = false;
-    	} else if (accion.equalsIgnoreCase(K.action_new)) {
-    		this.disabledFilterButton = true;
-    		this.disabledOrderButton = true;
-    		this.disabledNewButton = true;
-    		this.disabledSaveButton = false;
-    		this.disabledDeleteButton = true;
-    		this.disabledCancelButton = false;
-    	} else if (accion.equals(K.action_cancel)) {
-    		this.disabledFilterButton = false;
-    		this.disabledOrderButton = true;
-    		this.disabledNewButton = false;
-    		this.disabledSaveButton = true;
-    		this.disabledDeleteButton = true;
-    		this.disabledCancelButton = true;
-    	}else if (accion.equals(K.action_view)) {
-    		this.disabledFilterButton = false;
-    		this.disabledOrderButton = true;
-    		this.disabledNewButton = false;
-    		this.disabledSaveButton = true;
-    		this.disabledDeleteButton = true;
-    		this.disabledCancelButton = false;
-    	}
-    }
-    
-	
-    public void selectCustomerOnEdit(){
-    	
-    	System.out.println("CLIENTE SELECCIONADO:" + this.selCustomer );
-    	this.selected.setCliente(selCustomer);
-    	bEditCustomer = true;
-    }
-    
     public void selectCustomerOnFilter(){
-    	
-    	System.out.println("CLIENTE SELECCIONADO:" + this.filter.getCliente());
-    }
-
-    
-    public void clickFilterBtn(ActionEvent event) {
-    	if (this.showCustomerListForm) {
-    		this.showFilerVisitForm = false;
-    	} else {
-    		this.showFilerVisitForm = true;
-    	}
+    	this.bEditCustomer = false;
+    	this.selCustomer = this.selected.getCliente();
     }
     
-    public void clickNewCustomerBtn( ActionEvent event ) {
+    public void clickCustomerNew( ActionEvent event ) {
     	this.bNewCustomer = true;
-    	if (selected.getCliente()==null) {
-    		selected.setCliente(new Customer());
-    	}
+    	selected.setCliente(new Customer());
     }
     
-    
-    public void clickSaveCustomer(ActionEvent event) {
+    public void clickCustomerSave(ActionEvent event) {
     	
     	if (bNewCustomer) {
     		customerService.insert( selCustomer );
@@ -298,19 +167,6 @@ public class VisitEditController extends Controller {
     	}
     	
     }
-	
-
-	public List<Visit> getVisits() {
-		
-		if (visits==null) {
-			this.visits = this.visitService.getVisitsFiltered(filter);
-		}
-		return visits;
-	}
-
-	public void setVisits(List<Visit> visits) {
-		this.visits = visits;
-	}
 	
 	public Visit getSelected() {
 		return selected;
@@ -328,7 +184,6 @@ public class VisitEditController extends Controller {
 		this.properties = properties;
 	}
 
-
 	public VisitProperty getSelectedProperty() {
 		return selectedProperty;
 	}
@@ -341,11 +196,9 @@ public class VisitEditController extends Controller {
 		return propertyValue;
 	}
 
-
 	public void setPropertyValue(String[] propertyValue) {
 		this.propertyValue = propertyValue;
 	}
-
 
 	public String getPropertyValue(int index) {
 		return this.propertyValue[index];
@@ -367,22 +220,6 @@ public class VisitEditController extends Controller {
 		this.customerController = customerController;
 	}
 
-	public boolean isShowCustomerListForm() {
-		return showCustomerListForm;
-	}
-
-	public void setShowCustomerListForm(boolean showCustomerListForm) {
-		this.showCustomerListForm = showCustomerListForm;
-	}
-
-	public Visit getFilter() {
-		return filter;
-	}
-
-	public void setFilter(Visit filter) {
-		this.filter = filter;
-	}
-
 	public List<Customer> getCustomers() {
 		return customers;
 	}
@@ -391,82 +228,12 @@ public class VisitEditController extends Controller {
 		this.customers = customers;
 	}
 
-	
-
 	public CustomerServiceImpl getCustomerService() {
 		return customerService;
 	}
 
-
-
 	public void setCustomerService(CustomerServiceImpl customerService) {
 		this.customerService = customerService;
-	}
-
-
-
-	public boolean isShowFilerVisitForm() {
-		return showFilerVisitForm;
-	}
-
-	public void setShowFilerVisitForm(boolean showFilerVisitForm) {
-		this.showFilerVisitForm = showFilerVisitForm;
-	}
-
-	public boolean isDisabledNewButton() {
-		return disabledNewButton;
-	}
-
-	public void setDisabledNewButton(boolean disabledNewButton) {
-		this.disabledNewButton = disabledNewButton;
-	}
-
-	public boolean isDisabledSaveButton() {
-		return disabledSaveButton;
-	}
-
-	public void setDisabledSaveButton(boolean disabledSaveButton) {
-		this.disabledSaveButton = disabledSaveButton;
-	}
-
-	public boolean isDisabledDeleteButton() {
-		return disabledDeleteButton;
-	}
-
-	public void setDisabledDeleteButton(boolean disabledDeleteButton) {
-		this.disabledDeleteButton = disabledDeleteButton;
-	}
-
-	public boolean isDisabledCancelButton() {
-		return disabledCancelButton;
-	}
-
-	public void setDisabledCancelButton(boolean disabledCancelButton) {
-		this.disabledCancelButton = disabledCancelButton;
-	}
-
-	public boolean isDisabledFilterButton() {
-		return disabledFilterButton;
-	}
-
-	public void setDisabledFilterButton(boolean disabledFilterButton) {
-		this.disabledFilterButton = disabledFilterButton;
-	}
-
-	public boolean isDisabledOrderButton() {
-		return disabledOrderButton;
-	}
-
-	public void setDisabledOrderButton(boolean disabledorderButton) {
-		this.disabledOrderButton = disabledorderButton;
-	}
-
-	public Visit getEdited() {
-		return edited;
-	}
-
-	public void setEdited(Visit edited) {
-		this.edited = edited;
 	}
 
 	public List<VisitProperty> getListPropertiesSelected() {
@@ -477,36 +244,21 @@ public class VisitEditController extends Controller {
 		this.listPropertiesSelected = listPropertiesSelected;
 	}
 
-
-
 	public boolean isbEditCustomer() {
 		return bEditCustomer;
 	}
-
-
 
 	public void setbEditCustomer(boolean bEditCustomer) {
 		this.bEditCustomer = bEditCustomer;
 	}
 
-
-
 	public Customer getSelCustomer() {
 		return selCustomer;
 	}
-
-
 
 	public void setSelCustomer(Customer selCustomer) {
 		this.selCustomer = selCustomer;
 	}
 
-
-	
-	
-	
-	
-	
-	
 	
 }
