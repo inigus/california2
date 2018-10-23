@@ -1,0 +1,159 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:c="http://java.sun.com/jsp/jstl/core"
+                xmlns:p="http://primefaces.org/ui"
+                template="/WEB-INF/template.xhtml">
+
+    <ui:define name="title">Lista de visitas</ui:define>
+
+    <ui:define name="viewname">Lista de visitas</ui:define>
+
+    <ui:define name="content">
+        <h:form id="f1">
+            <div class="ui-fluid">
+                <div class="ui-g">
+                
+                	<!-- Datos del cliente -->
+                	<div class="ui-g-12">
+                        <div class="card card-w-title">
+                        	<h1>Datos del cliente</h1>
+                        	<p:panelGrid columns="3" columnClasses="ui-grid-col-4,ui-grid-col-4,ui-grid-col-4" layout="grid" styleClass="ui-panelgrid-blank form-group" style="border:0px none; background-color:transparent;">
+                        		
+                        		<p:selectOneListbox id="clienteEdit" value="#{visitTree.selected.cliente}" converter="customerConverter" 
+                        							var="t" filter="true" filterMatchMode="contains" >
+							            <p:ajax listener="#{visitTree.selectCustomerOnFilter}" update="f1" />
+							            <f:selectItems value="#{visitTree.customers}" var="customer" itemLabel="#{customer.nombrePoblacion}" itemValue="#{customer}" />
+							            <p:column>
+							                <h:outputText value="#{t.nombrePoblacion}" />
+							            </p:column>
+							        </p:selectOneListbox>
+							        
+           						<p:commandButton value="Nuevo Cliente" actionListener="#{visitTree.clickCustomerNew}" update="f1" />	
+                        	</p:panelGrid>
+                        	
+                        	<p:panel header="Ver detalle del cliente" toggleable="true" collapsed="true" >
+	                        	<p:panelGrid id="customerData" columns="4" columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4" layout="grid" styleClass="ui-panelgrid-blank form-group" style="border:0px none; background-color:transparent;">
+	                        		<p:outputLabel for="nombre" value="Nombre"/>
+	                                <p:inputText id="nombre" value="#{visitTree.selCustomer.nombre}"/>
+	                                
+	                                <p:outputLabel for="apellidos" value="Apellidos"/>
+	                                <p:inputText id="apellidos" value="#{visitTree.selCustomer.apellidos}"/>
+	                        	
+	                        		<p:outputLabel for="poblacion" value="Poblacion"/>
+	                                <p:inputText id="poblacion" value="#{visitTree.selCustomer.poblacion}"/>
+	                                
+	                                <p:outputLabel for="telefono" value="Telefono"/>
+	                                <p:inputText id="telefono" value="#{visitTree.selCustomer.telefono}"/>
+	                        	
+	                        		<p:outputLabel for="mail" value="Correo electronico"/>
+	                                <p:inputText id="mail" value="#{visitTree.selCustomer.mail}"/>
+	                                
+	                                <p:outputLabel for="fechaAlta" value="Fecha Alta"/>
+	                                <p:calendar id="fechaAlta" value="#{visitTree.selCustomer.fechaAlta}" pattern="MM/dd/yyyy HH:mm" showOn="button" >
+		            					<p:ajax event="dateSelect" />
+		            				</p:calendar>
+		            				
+		            				<p:outputLabel for="descripcion" value="Descripcion"/>
+		            				<p:inputTextarea id="descripcion" value="#{visitTree.selCustomer.descripcion}" autoResize="false"/>
+	                                
+	                                <p:outputLabel for="prescriptor" value="Prescriptor"/>
+	                                <p:selectBooleanButton id="prescriptor" onLabel="Si" offLabel="No" onIcon="ui-icon-check" offIcon="ui-icon-close" value="#{visitTree.selCustomer.esPrescriptorBoolean}"/>
+	                        	
+	                        		<p:commandButton value="Guardar Cliente" actionListener="#{visitTree.clickCustomerSave}" update="f1" />	
+	                        	</p:panelGrid>
+                        	</p:panel>
+                    	</div>
+                    </div>
+                	<!-- Fin datos cliente -->
+                	
+                	
+                	<!-- Datos de la Visita  -->
+                	<div class="ui-g-12">
+                        <div class="card card-w-title">
+                        	<h1>Datos de la visita</h1>
+                	
+                			<p:panelGrid id="visitData" columns="4" columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4" layout="grid" styleClass="ui-panelgrid-blank form-group" style="border:0px none; background-color:transparent;">
+                        		<p:outputLabel for="fecha" value="Fecha de la visita"/>
+                                <p:calendar id="fecha" value="#{visitTree.selected.fecha}" pattern="MM/dd/yyyy HH:mm" showOn="button" >
+	            					<p:ajax event="dateSelect" />
+	            				</p:calendar>
+                                
+                                <p:outputLabel for="fechaProxima" value="Fecha proxima visita"/>
+                                <p:calendar id="fechaProxima" value="#{visitTree.selected.fechaProxima}" pattern="MM/dd/yyyy HH:mm" showOn="button" >
+	            					<p:ajax event="dateSelect" />
+	            				</p:calendar>
+	            				
+	            				<p:outputLabel for="customerDescription" value="Descripcion"/>
+	            				<p:inputTextarea id="customerDescription" value="#{visitTree.selected.descripcion}" autoResize="false"/>
+	            				
+	            				<p:outputLabel for="compra" value="Compra"/>
+                                <p:selectBooleanButton id="compra" onLabel="Si" offLabel="No" onIcon="ui-icon-check" offIcon="ui-icon-close" value="#{visitTree.selected.esCompraBoolean}"/>
+                        	</p:panelGrid>
+                        	
+                        	<!-- atributos -->
+                        	
+                        	<!-- <ui:repeat value="#{visitTree.properties}" var="pro" varStatus="loop">
+	           					<p:panelGrid id="visitAttributes" columns="4" columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4" layout="grid" styleClass="ui-panelgrid-blank form-group" style="border:0px none; background-color:transparent;">             		
+	                        		<p:outputLabel id="panel#{loop.index}"  value="#{pro.propiedad}"/>
+	                        		
+	                        		<p:inputText id="mail#{loop.index}" value="XXXXXXXXX_#{loop.index}"/>
+	                        		
+	                        		 <p:outputPanel>
+		                        		<div class="ui-inputgroup">
+								            <p:inputText placeholder="Keyboard" />
+								            <p:commandButton icon="fa fa-plus"  styleClass="white-button"/>  
+								        </div>
+	                        		 </p:outputPanel>
+                        		</p:panelGrid>
+                        	</ui:repeat> -->
+                        	
+                        	<ui:repeat value="#{visitTree.properties}" var="pro" varStatus="loop">
+	           					<p:separator />
+	           					<p:panelGrid id="visitAttributes_#{loop.index}" columns="4" columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-4,ui-grid-col-2" layout="grid" styleClass="ui-panelgrid-blank form-group" style="border:0px none; background-color:transparent;">             		
+	                        		<p:outputLabel id="panel#{loop.index}"  value="#{pro.propiedad}"/>
+	                        		
+	                        		<p:outputPanel>
+		                        		<div class="ui-inputgroup">
+								            <p:inputText id="valorProperty_#{loop.index}" value="#{visitTree.propertyValue[loop.index]}" placeholder="Añadir un #{pro.propiedad}" />
+								            <p:commandButton icon="fa fa-plus"  styleClass="white-button" actionListener="#{visitTree.addProperty(pro.propiedad)}" update="f1" />  
+								        </div>
+	                        		</p:outputPanel>
+		                        	
+		                        	<c:set var="cont" value="#{loop.index}" />
+		                        	<p:selectManyMenu id="listProperties_#{loop.index}" value="#{visitTree.listPropertiesSelected}" converter="visitPropertyConverter" showCheckbox="true" onchange="#{visitTree.deleteProperty(pro.propiedad)}">
+				                        <f:selectItems value="#{visitTree.getVisitPropertyValues(pro.propiedad)}" var="item"
+                           								itemLabel="#{item.valor}" itemValue="#{item}"   />
+				                    </p:selectManyMenu>
+		                        	
+		                        	<p:commandButton  id="delete#{loop.index}" update="f1"  icon="fa fa-trash" value="Eliminar"  styleClass="white-button" actionListener="#{visitTree.deleteProperty(pro.propiedad)}" oncomplete="alert('no vuelvo')" />
+	                        		
+                        		</p:panelGrid>
+                        	</ui:repeat>
+ 
+                		</div>
+                	</div>
+    
+    
+    				<div class="ui-g-12">
+                        <div class="card card-w-title">
+                	
+                			<p:panelGrid columns="4" columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-4,ui-grid-col-2" layout="grid" styleClass="ui-panelgrid-blank form-group" style="border:0px none; background-color:transparent;">
+                        		
+                        		<p:commandButton value="Guardar Visita" actionListener="#{visitTree.clickVisitSave}" update="f1" />
+                        		<p:outputPanel></p:outputPanel>
+                        		<p:outputPanel></p:outputPanel>
+                        		
+           						<p:commandButton value="Cancelar"  actionListener="#{visitTree.clickVisitCancel}" update="f1" />	
+    				
+							</p:panelGrid>
+						</div>
+					</div>
+					                    
+                </div>
+            </div>
+        </h:form>
+    </ui:define>
+
+</ui:composition>
