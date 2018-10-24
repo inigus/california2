@@ -38,6 +38,11 @@ public class VisitTreeController extends Controller {
 	@ManagedProperty("#{customerService}")
     private CustomerServiceImpl customerService;
 	
+	
+	private Visit filter = new Visit();
+	
+	private String filterGroup = "";
+	
 	private VisitService visitService = new VisitServiceImpl();
 	
 	private PropertyService proService = new PropertyServiceImpl();
@@ -85,6 +90,12 @@ public class VisitTreeController extends Controller {
 			mPropertyIndex.put(prop.getPropiedad(), i++);
 		}
 
+    }
+	
+	
+    public void clickFilter( ActionEvent event ) {
+    	this.bNewCustomer = true;
+    	selected.setCliente(new Customer());
     }
 
     
@@ -151,10 +162,7 @@ public class VisitTreeController extends Controller {
     	this.selCustomer = this.selected.getCliente();
     }
     
-    public void clickCustomerNew( ActionEvent event ) {
-    	this.bNewCustomer = true;
-    	selected.setCliente(new Customer());
-    }
+
     
     public void clickCustomerSave(ActionEvent event) {
     	
@@ -260,5 +268,24 @@ public class VisitTreeController extends Controller {
 		this.selCustomer = selCustomer;
 	}
 
+
+
+	//////////////////////////////////////////////////
+	public Visit getFilter() {
+		return filter;
+	}
+
+	public void setFilter(Visit filter) {
+		this.filter = filter;
+	}
+
+	public String getFilterGroup() {
+		return filterGroup;
+	}
+
+	public void setFilterGroup(String filterGroup) {
+		this.filterGroup = filterGroup;
+	}
+	
 	
 }

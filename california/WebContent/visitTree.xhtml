@@ -19,7 +19,7 @@
                 	<div class="ui-g-12">
                         <div class="card card-w-title">
                         	<h1>Datos del cliente</h1>
-                        	<p:panelGrid columns="3" columnClasses="ui-grid-col-4,ui-grid-col-4,ui-grid-col-4" layout="grid" styleClass="ui-panelgrid-blank form-group" style="border:0px none; background-color:transparent;">
+                        	<p:panelGrid columns="2" columnClasses="ui-grid-col-3,ui-grid-col-9" layout="grid" styleClass="ui-panelgrid-blank form-group" style="border:0px none; background-color:transparent;">
                         		
                         		<p:selectOneListbox id="clienteEdit" value="#{visitTree.selected.cliente}" converter="customerConverter" 
                         							var="t" filter="true" filterMatchMode="contains" >
@@ -28,9 +28,58 @@
 							            <p:column>
 							                <h:outputText value="#{t.nombrePoblacion}" />
 							            </p:column>
-							        </p:selectOneListbox>
-							        
-           						<p:commandButton value="Nuevo Cliente" actionListener="#{visitTree.clickCustomerNew}" update="f1" />	
+							    </p:selectOneListbox>
+							    
+							    <p:panelGrid columns="4" columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4" layout="grid" styleClass="ui-panelgrid-blank form-group" style="border:0px none; background-color:transparent;">
+								    <p:outputLabel for="fechaDesde" value="Visita desde"/>
+	                                <p:calendar id="fechaDesde" value="#{visitTree.filter.fechaDesde}" pattern="MM/dd/yyyy" showOn="button" >
+		            					<p:ajax event="dateSelect" />
+		            				</p:calendar>
+		            				
+		            				<p:outputLabel for="fechaHasta" value="Visita hasta"/>
+	                                <p:calendar id="fechaHasta" value="#{visitTree.filter.fechaHasta}" pattern="MM/dd/yyyy" showOn="button" >
+		            					<p:ajax event="dateSelect" />
+		            				</p:calendar>
+		            				
+		            				<p:outputLabel for="fechaProximaDesde" value="Proxima visita desde"/>
+	                                <p:calendar id="fechaProximaDesde" value="#{visitTree.filter.fechaProximaDesde}" pattern="MM/dd/yyyy" showOn="button" >
+		            					<p:ajax event="dateSelect" />
+		            				</p:calendar>
+		            				
+		            				<p:outputLabel for="fechaProximaHasta" value="Proxima visita hasta"/>
+	                                <p:calendar id="fechaProximaHasta" value="#{visitTree.filter.fechaProximaHasta}" pattern="MM/dd/yyyy" showOn="button" >
+		            					<p:ajax event="dateSelect" />
+		            				</p:calendar>    
+		            				
+		            				<p:outputLabel for="filterDescription" value="Descripcion"/>
+		            				<p:inputTextarea id="filterDescription" value="#{visitTree.filter.descripcion}" autoResize="false"/>
+		            				
+		            				<p:outputLabel for="filterDescription" value="Compra"/>
+		            				<p:selectOneButton id="filterCompra" value="#{visitTree.filter.compra}">
+                                    	<f:selectItem itemLabel="Sin valor" itemValue="-1"/>
+                                    	<f:selectItem itemLabel="Si" itemValue="1" />
+                                    	<f:selectItem itemLabel="No" itemValue="0" />
+                                	</p:selectOneButton>
+                                	
+                                	<p:outputPanel></p:outputPanel>
+                                	<p:outputPanel></p:outputPanel>
+                                	<p:outputPanel></p:outputPanel>
+                                	
+                                	<!-- p:commandButton value="Filtrar" actionListener="#{visitTree.clickFilter}" update="f1" /-->
+                                	
+							    </p:panelGrid>
+							
+							</p:panelGrid>
+                        	<p:panelGrid columns="4" columnClasses="ui-grid-col-3,ui-grid-col-5,ui-grid-col-2,ui-grid-col-3" layout="grid" styleClass="ui-panelgrid-blank form-group" style="border:0px none; background-color:transparent;">
+                        		 <p:outputLabel for="filterGroup" value="Listado agrupado por:"/>
+                        		 <p:selectOneButton id="filterGroup" value="#{visitTree.filterGroup}">
+                                    	<f:selectItem itemLabel="Cliente" itemValue="1"/>
+                                    	<f:selectItem itemLabel="Fecha" itemValue="2" />
+                                    	<f:selectItem itemLabel="Localidad" itemValue="3" />
+                                </p:selectOneButton>
+                        	
+                        		<p:outputPanel></p:outputPanel>
+                        		<p:commandButton value="Filtrar" actionListener="#{visitTree.clickFilter}" update="f1" />
                         	</p:panelGrid>
                         	
                         	<p:panel header="Ver detalle del cliente" toggleable="true" collapsed="true" >
