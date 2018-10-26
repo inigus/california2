@@ -117,6 +117,28 @@
                     </div>
                 	<!-- Fin datos cliente -->
                 	
+               	
+               	<!-- Listado de visitas  -->
+               	<div class="ui-g-12">
+                    <div class="card card-w-title">
+                        <h1>TreeTable</h1>
+                        <p:treeTable value="#{visitTree.treeVisitsRoot}" var="visit" selectionMode="checkbox" selection="#{treeSelectionView.selectedNodes1}">
+                            <f:facet name="header">
+                                Checkbox
+                            </f:facet>
+                            <p:column headerText="Name" sortBy="#{visit.cliente.nombre}">
+                                <h:outputText value="#{visit.cliente.nombre}" />
+                            </p:column>
+                            <p:column headerText="Fecha Visita">
+                                <h:outputText value="#{visit.fecha}" />
+                            </p:column>
+                            <p:column headerText="Compra">
+                                <h:outputText value="#{visit.compra}" />
+                            </p:column>
+                        </p:treeTable>
+                    </div>
+                </div>
+               <!-- fin listado visitas  --> 	
                 	
                 	<!-- Datos de la Visita  -->
                 	<div class="ui-g-12">
