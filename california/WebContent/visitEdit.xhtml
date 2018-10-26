@@ -117,17 +117,17 @@
 	                        		<p:outputPanel>
 		                        		<div class="ui-inputgroup">
 								            <p:inputText id="valorProperty_#{loop.index}" value="#{visitEdit.propertyValue[loop.index]}" placeholder="Añadir un #{pro.propiedad}" />
-								            <p:commandButton icon="fa fa-plus"  styleClass="white-button" actionListener="#{visitEdit.addProperty(pro.propiedad)}" update="f1" />  
+								            <p:commandButton icon="fa fa-plus"  styleClass="white-button" actionListener="#{visitEdit.clickAddProperty(pro.propiedad)}" update="f1" />  
 								        </div>
 	                        		</p:outputPanel>
 		                        	
 		                        	<c:set var="cont" value="#{loop.index}" />
-		                        	<p:selectManyMenu id="listProperties_#{loop.index}" value="#{visitEdit.listPropertiesSelected}" converter="visitPropertyConverter" showCheckbox="true" onchange="#{visitEdit.deleteProperty(pro.propiedad)}">
+		                        	<p:selectManyMenu id="listProperties_#{loop.index}" value="#{visitEdit.listPropertiesSelected}" converter="visitPropertyConverter" showCheckbox="true" onchange="#{visitEdit.clickDeleteProperty(pro.propiedad)}">
 				                        <f:selectItems value="#{visitEdit.getVisitPropertyValues(pro.propiedad)}" var="item"
                            								itemLabel="#{item.valor}" itemValue="#{item}"   />
 				                    </p:selectManyMenu>
 		                        	
-		                        	<p:commandButton  id="delete#{loop.index}" update="f1"  icon="fa fa-trash" value="Eliminar"  styleClass="white-button" actionListener="#{visitEdit.deleteProperty(pro.propiedad)}" oncomplete="alert('no vuelvo')" />
+		                        	<p:commandButton  id="delete#{loop.index}" update="f1"  icon="fa fa-trash" value="Eliminar"  styleClass="white-button" actionListener="#{visitEdit.clickDeleteProperty(pro.propiedad)}" oncomplete="alert('no vuelvo')" />
 	                        		
                         		</p:panelGrid>
                         	</ui:repeat>

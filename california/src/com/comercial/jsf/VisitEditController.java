@@ -120,7 +120,7 @@ public class VisitEditController extends Controller {
     	System.out.println( "CUSTOMER SELECTED(DELETE):" + selected.toString() );
     }
     
-    public void addProperty(String property) {
+    public void clickAddProperty(String property) {
     	
     	int index = this.mPropertyIndex.get(property);
     	String value = this.propertyValue[index];
@@ -134,7 +134,7 @@ public class VisitEditController extends Controller {
     	System.out.println("aaaaaaaaaaaaa");
     }
     
-    public void deleteProperty(String property) {
+    public void clickDeleteProperty(String property) {
 	
     	Property prop = Property.getPropertyByName(properties, property);
     
