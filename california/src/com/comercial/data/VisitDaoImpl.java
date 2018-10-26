@@ -10,6 +10,7 @@ import javax.persistence.Query;
 
 import com.comercial.model.Customer;
 import com.comercial.model.Visit;
+import com.comercial.utils.Util;
 
 public class VisitDaoImpl extends BaseDao implements VisitDao {
 
@@ -19,7 +20,7 @@ public class VisitDaoImpl extends BaseDao implements VisitDao {
 	
 	
 	@Override
-	public List<Visit> getVisits(Visit visita) {
+	public List<Visit> getVisits(Visit visita, String orderBy ) {
 		// TODO Auto-generated method stub
 		try {
 			
@@ -35,10 +36,16 @@ public class VisitDaoImpl extends BaseDao implements VisitDao {
 				mParams.put("fechaHasta", visita.getFechaHasta());
 			} 
 			
+			if (Util.isNotBlank(orderBy)) {
+				sql += " order by v." + orderBy + " ASC";
+			}
+			
 			Query query = em.createQuery(sql);
 			for (String param : mParams.keySet() ) {
 				query.setParameter(param, mParams.get(param));
 			}
+			
+			
 			
 			List<Visit> visitas = (List<Visit>) query.getResultList();
 			

@@ -87,7 +87,7 @@ public class VisitController {
 	public VisitController() {
 		// TODO Auto-generated method stub
 
-		this.visits = this.visitService.getVisitsFiltered(filter);
+		this.visits = this.visitService.getVisitsFiltered(filter, "cliente.nombre" );
 		
 		Property pro = new Property();
 		pro.setEntidad("visita");
@@ -107,13 +107,13 @@ public class VisitController {
 	 */
 	
 	public void filterVisits(ActionEvent event) {
-		this.visits = this.visitService.getVisitsFiltered(filter);
+		this.visits = this.visitService.getVisitsFiltered(filter, null);
     	System.out.println("FILTRADO VISITAS");
     }
 	
 	public void filterVisitsCancel(ActionEvent event) {
     	this.filter = new Visit();
-		this.visits = this.visitService.getVisitsFiltered(filter);
+		this.visits = this.visitService.getVisitsFiltered(filter,null);
     	System.out.println("FILTRADO VISITAS");
     }
 	
@@ -262,7 +262,7 @@ public class VisitController {
 	public List<Visit> getVisits() {
 		
 		if (visits==null) {
-			this.visits = this.visitService.getVisitsFiltered(filter);
+			this.visits = this.visitService.getVisitsFiltered(filter,null);
 		}
 		return visits;
 	}

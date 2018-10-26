@@ -18,9 +18,9 @@ public class VisitServiceImpl  extends BaseService implements VisitService {
 	
 	
 	@Override
-	public List<Visit> getVisitsFiltered(Visit visita) {
+	public List<Visit> getVisitsFiltered(Visit visita, String orderBy) {
 
-		return visitDao.getVisits(visita);
+		return visitDao.getVisits(visita, orderBy);
 	}
 	
 

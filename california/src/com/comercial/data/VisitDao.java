@@ -7,7 +7,7 @@ import com.comercial.model.Visit;
 public interface VisitDao {
 
 
-	public List<Visit> getVisits(Visit visita);
+	public List<Visit> getVisits(Visit visita, String orderBy);
 	
 
 	public void removeProperties(Visit visita);

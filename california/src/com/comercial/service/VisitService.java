@@ -7,7 +7,13 @@ import com.comercial.model.Visit;
 public interface VisitService {
 	
 	
-	public List<Visit> getVisitsFiltered(Visit visita);
+	/**
+	 * 
+	 * @param visita
+	 * @param orderBy nombre del atributo por el que se ordena
+	 * @return
+	 */
+	public List<Visit> getVisitsFiltered(Visit visita, String orderBy);
 	
 	public Visit get(Integer idVisita);
 	

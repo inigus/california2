@@ -15,6 +15,10 @@ import javax.faces.event.ActionEvent;
 import javax.faces.event.ValueChangeEvent;
 import javax.servlet.http.HttpSession;
 
+import org.primefaces.california.domain.Document;
+import org.primefaces.model.DefaultTreeNode;
+import org.primefaces.model.TreeNode;
+
 import com.comercial.model.Customer;
 import com.comercial.model.Property;
 import com.comercial.model.Visit;
@@ -38,14 +42,21 @@ public class VisitTreeController extends Controller {
 	@ManagedProperty("#{customerService}")
     private CustomerServiceImpl customerService;
 	
+	private VisitService visitService = new VisitServiceImpl();
+	
+	private PropertyService proService = new PropertyServiceImpl();
+	
+	
+	private List<Visit> lisVisits;
+	
+	private TreeNode treeVisitsRoot;
+	 private TreeNode[] selectedNodes;
 	
 	private Visit filter = new Visit();
 	
 	private String filterGroup = "";
 	
-	private VisitService visitService = new VisitServiceImpl();
-	
-	private PropertyService proService = new PropertyServiceImpl();
+
 	
 	private Visit selected;
 	
@@ -75,6 +86,12 @@ public class VisitTreeController extends Controller {
         // Remember already saved result from view scoped bean
 		// validateSession();
         
+		
+		
+		
+		obtainVisits();
+		
+		
         this.customers = customerService.getCustomers();
         
         selected = new Visit();
@@ -94,10 +111,38 @@ public class VisitTreeController extends Controller {
 	
 	
     public void clickFilter( ActionEvent event ) {
+    	
+    	this.obtainVisits();
+    	
     	this.bNewCustomer = true;
     	selected.setCliente(new Customer());
     }
 
+    private void obtainVisits() {
+    	
+    	this.lisVisits = visitService.getVisitsFiltered(filter, "cliente.nombre");
+    	
+    	
+    	TreeNode root = new DefaultTreeNode( new Visit(), null);
+    	int idCustomer = -1;
+    	Visit v;
+    	TreeNode newLevel = null;
+    	TreeNode treeCustomer = null;;
+    	
+    	for ( int i=0; i<lisVisits.size();i++ ){
+    		v = lisVisits.get(i);
+    		System.out.println("i:" + i + "  id:" + idCustomer + "   id:" + v.getCliente().getIdCliente() );
+    		if (i==0) {
+    			newLevel = new DefaultTreeNode( v, root);
+    		} else if ( v.getCliente().getIdCliente().intValue()!= idCustomer ) {
+    			newLevel = new DefaultTreeNode( v, root);
+    		}
+    		treeCustomer = new DefaultTreeNode( v, newLevel);
+    		idCustomer = v.getCliente().getIdCliente().intValue();
+    	}
+    	this.treeVisitsRoot = root;
+    	
+    }
     
     public List<VisitProperty> getVisitPropertyValues(String propiedad) {
     	
@@ -286,6 +331,24 @@ public class VisitTreeController extends Controller {
 	public void setFilterGroup(String filterGroup) {
 		this.filterGroup = filterGroup;
 	}
+
+	public TreeNode getTreeVisitsRoot() {
+		return treeVisitsRoot;
+	}
+
+	public void setTreeVisitsRoot(TreeNode treeVisitsRoot) {
+		this.treeVisitsRoot = treeVisitsRoot;
+	}
+
+	public TreeNode[] getSelectedNodes() {
+		return selectedNodes;
+	}
+
+	public void setSelectedNodes(TreeNode[] selectedNodes) {
+		this.selectedNodes = selectedNodes;
+	}
+	
+	
 	
 	
 }
