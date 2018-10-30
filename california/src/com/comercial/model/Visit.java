@@ -49,6 +49,9 @@ public class Visit implements Serializable {
 	
 	@Column(name="fechaProxima", nullable=true, unique=false)
 	private Date fechaProxima;
+
+	@Column(name="compra", nullable=true, unique=false)
+	private String compra;
 	
 	@Transient
 	private Date fechaProximaDesde;
@@ -56,8 +59,8 @@ public class Visit implements Serializable {
 	@Transient
 	private Date fechaProximaHasta;
 	
-	@Column(name="compra", nullable=true, unique=false)
-	private String compra;
+	@Transient
+	private String treeColumn;
 	
 	
 	@OneToMany(mappedBy="visita", cascade=CascadeType.ALL, orphanRemoval=true)
@@ -204,7 +207,14 @@ public class Visit implements Serializable {
 		this.fechaProximaHasta = fechaProximaHasta;
 	}
 	
-	
+	public String getTreeColumn() {
+		return treeColumn;
+	}
+
+
+	public void setTreeColumn(String treeColumn) {
+		this.treeColumn = treeColumn;
+	}
 
 
 	@Override

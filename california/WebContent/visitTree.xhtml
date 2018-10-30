@@ -12,6 +12,7 @@
 
     <ui:define name="content">
         <h:form id="f1">
+        	<p:growl id="growl" showDetail="true" sticky="true" />
             <div class="ui-fluid">
                 <div class="ui-g">
                 
@@ -64,10 +65,7 @@
                                 	<p:outputPanel></p:outputPanel>
                                 	<p:outputPanel></p:outputPanel>
                                 	<p:outputPanel></p:outputPanel>
-                                	
-                                	<!-- p:commandButton value="Filtrar" actionListener="#{visitTree.clickFilter}" update="f1" /-->
-                                	
-							    </p:panelGrid>
+                                </p:panelGrid>
 							
 							</p:panelGrid>
                         	<p:panelGrid columns="4" columnClasses="ui-grid-col-3,ui-grid-col-5,ui-grid-col-2,ui-grid-col-3" layout="grid" styleClass="ui-panelgrid-blank form-group" style="border:0px none; background-color:transparent;">
@@ -82,8 +80,44 @@
                         		<p:commandButton value="Filtrar" actionListener="#{visitTree.clickFilter}" update="f1" />
                         	</p:panelGrid>
                         	
-                        	<p:panel header="Ver detalle del cliente" toggleable="true" collapsed="true" >
-	                        	<p:panelGrid id="customerData" columns="4" columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4" layout="grid" styleClass="ui-panelgrid-blank form-group" style="border:0px none; background-color:transparent;">
+                    	</div>
+                    </div>
+                	<!-- Fin datos cliente -->
+                	
+               	
+               	<!-- Listado de visitas  -->
+               	<div class="ui-g-12">
+                    <div class="card card-w-title">
+                        <h1>Listado de Visitas</h1>
+                        <p:treeTable value="#{visitTree.treeVisitsRoot}" var="visit" selectionMode="single" selection="#{visitTree.selectedNode}" >
+                            <!-- f:facet name="header">
+                                Checkbox
+                            </f:facet-->
+                            <p:ajax event="select" listener="#{visitTree.clickRowTree}" update="f1:customerData f1:visitData f1:visitProperties"/>  
+                            
+                            <p:column headerText="Name" sortBy="#{visit.cliente.nombre}">
+                                <h:outputText value="#{visit.cliente.nombre}" />
+                            </p:column>
+                            <p:column headerText="Fecha Visita">
+                                <h:outputText value="#{visit.treeColumn}" />
+                            </p:column>
+                            <p:column headerText="Compra">
+                                <h:outputText value="#{visit.compra}" />
+                            </p:column>
+                        </p:treeTable>
+                        
+                        <!-- p:commandButton value="Editar/Ver visita" actionListener="#{visitTree.clickEditVisit}" update="f1" /-->
+                    </div>
+                </div>
+               <!-- fin listado visitas  --> 	
+                	
+                	<!-- Datos de la Visita  -->
+                	<div class="ui-g-12">
+                        <div class="card card-w-title">
+                        	<p:panelGrid id="visitProperties">
+                        	<p:panelGrid rendered="#{visitTree.selected != null}">
+                        	<h1>Datos del Cliente</h1>
+                        	<p:panelGrid id="customerData" columns="4" columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4" layout="grid" styleClass="ui-panelgrid-blank form-group" style="border:0px none; background-color:transparent;">
 	                        		<p:outputLabel for="nombre" value="Nombre"/>
 	                                <p:inputText id="nombre" value="#{visitTree.selCustomer.nombre}"/>
 	                                
@@ -110,41 +144,13 @@
 	                                <p:outputLabel for="prescriptor" value="Prescriptor"/>
 	                                <p:selectBooleanButton id="prescriptor" onLabel="Si" offLabel="No" onIcon="ui-icon-check" offIcon="ui-icon-close" value="#{visitTree.selCustomer.esPrescriptorBoolean}"/>
 	                        	
+	                        		<p:outputPanel/>
+	                        		<p:outputPanel/>
+	                        		<p:outputPanel/>
 	                        		<p:commandButton value="Guardar Cliente" actionListener="#{visitTree.clickCustomerSave}" update="f1" />	
 	                        	</p:panelGrid>
-                        	</p:panel>
-                    	</div>
-                    </div>
-                	<!-- Fin datos cliente -->
-                	
-               	
-               	<!-- Listado de visitas  -->
-               	<div class="ui-g-12">
-                    <div class="card card-w-title">
-                        <h1>TreeTable</h1>
-                        <p:treeTable value="#{visitTree.treeVisitsRoot}" var="visit" selectionMode="checkbox" selection="#{treeSelectionView.selectedNodes1}">
-                            <f:facet name="header">
-                                Checkbox
-                            </f:facet>
-                            <p:column headerText="Name" sortBy="#{visit.cliente.nombre}">
-                                <h:outputText value="#{visit.cliente.nombre}" />
-                            </p:column>
-                            <p:column headerText="Fecha Visita">
-                                <h:outputText value="#{visit.fecha}" />
-                            </p:column>
-                            <p:column headerText="Compra">
-                                <h:outputText value="#{visit.compra}" />
-                            </p:column>
-                        </p:treeTable>
-                    </div>
-                </div>
-               <!-- fin listado visitas  --> 	
-                	
-                	<!-- Datos de la Visita  -->
-                	<div class="ui-g-12">
-                        <div class="card card-w-title">
+                        
                         	<h1>Datos de la visita</h1>
-                	
                 			<p:panelGrid id="visitData" columns="4" columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4" layout="grid" styleClass="ui-panelgrid-blank form-group" style="border:0px none; background-color:transparent;">
                         		<p:outputLabel for="fecha" value="Fecha de la visita"/>
                                 <p:calendar id="fecha" value="#{visitTree.selected.fecha}" pattern="MM/dd/yyyy HH:mm" showOn="button" >
@@ -163,26 +169,10 @@
                                 <p:selectBooleanButton id="compra" onLabel="Si" offLabel="No" onIcon="ui-icon-check" offIcon="ui-icon-close" value="#{visitTree.selected.esCompraBoolean}"/>
                         	</p:panelGrid>
                         	
-                        	<!-- atributos -->
-                        	
-                        	<!-- <ui:repeat value="#{visitTree.properties}" var="pro" varStatus="loop">
-	           					<p:panelGrid id="visitAttributes" columns="4" columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4" layout="grid" styleClass="ui-panelgrid-blank form-group" style="border:0px none; background-color:transparent;">             		
-	                        		<p:outputLabel id="panel#{loop.index}"  value="#{pro.propiedad}"/>
-	                        		
-	                        		<p:inputText id="mail#{loop.index}" value="XXXXXXXXX_#{loop.index}"/>
-	                        		
-	                        		 <p:outputPanel>
-		                        		<div class="ui-inputgroup">
-								            <p:inputText placeholder="Keyboard" />
-								            <p:commandButton icon="fa fa-plus"  styleClass="white-button"/>  
-								        </div>
-	                        		 </p:outputPanel>
-                        		</p:panelGrid>
-                        	</ui:repeat> -->
-                        	
                         	<ui:repeat value="#{visitTree.properties}" var="pro" varStatus="loop">
 	           					<p:separator />
 	           					<p:panelGrid id="visitAttributes_#{loop.index}" columns="4" columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-4,ui-grid-col-2" layout="grid" styleClass="ui-panelgrid-blank form-group" style="border:0px none; background-color:transparent;">             		
+	                        		
 	                        		<p:outputLabel id="panel#{loop.index}"  value="#{pro.propiedad}"/>
 	                        		
 	                        		<p:outputPanel>
@@ -202,25 +192,21 @@
 	                        		
                         		</p:panelGrid>
                         	</ui:repeat>
- 
+ 							
+ 							<br/><br/>
+ 							<!-- Botonera de acciones  -->
+ 							<p:panelGrid columns="4" columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-4,ui-grid-col-2" layout="grid" styleClass="ui-panelgrid-blank form-group" style="border:0px none; background-color:transparent;">
+                        		<p:commandButton value="Cancelar"  actionListener="#{visitTree.clickVisitCancel}" update="f1" />
+                        		<p:outputPanel></p:outputPanel>
+                        		<p:outputPanel></p:outputPanel>
+                        		<p:commandButton value="Guardar Visita" actionListener="#{visitTree.clickVisitSave}" update="f1" />
+							</p:panelGrid>
+							
+							</p:panelGrid>
+							</p:panelGrid>
                 		</div>
                 	</div>
     
-    
-    				<div class="ui-g-12">
-                        <div class="card card-w-title">
-                	
-                			<p:panelGrid columns="4" columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-4,ui-grid-col-2" layout="grid" styleClass="ui-panelgrid-blank form-group" style="border:0px none; background-color:transparent;">
-                        		
-                        		<p:commandButton value="Guardar Visita" actionListener="#{visitTree.clickVisitSave}" update="f1" />
-                        		<p:outputPanel></p:outputPanel>
-                        		<p:outputPanel></p:outputPanel>
-                        		
-           						<p:commandButton value="Cancelar"  actionListener="#{visitTree.clickVisitCancel}" update="f1" />	
-    				
-							</p:panelGrid>
-						</div>
-					</div>
 					                    
                 </div>
             </div>

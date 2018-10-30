@@ -1,5 +1,6 @@
 package com.comercial.data;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -45,14 +46,11 @@ public class VisitDaoImpl extends BaseDao implements VisitDao {
 				query.setParameter(param, mParams.get(param));
 			}
 			
-			
-			
 			List<Visit> visitas = (List<Visit>) query.getResultList();
 			
-
 			return visitas;
 		} catch (NoResultException e) {
-			return null;
+			return new ArrayList<Visit>();
 		}
 	}
 

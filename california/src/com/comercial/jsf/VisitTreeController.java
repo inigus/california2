@@ -29,6 +29,7 @@ import com.comercial.service.PropertyServiceImpl;
 import com.comercial.service.VisitService;
 import com.comercial.service.VisitServiceImpl;
 import com.comercial.utils.K;
+import com.comercial.utils.Util;
 
 
 @ManagedBean(name = "visitTree")
@@ -50,7 +51,8 @@ public class VisitTreeController extends Controller {
 	private List<Visit> lisVisits;
 	
 	private TreeNode treeVisitsRoot;
-	 private TreeNode[] selectedNodes;
+	private TreeNode selectedNode;
+	private TreeNode[] selectedNodes;
 	
 	private Visit filter = new Visit();
 	
@@ -86,18 +88,11 @@ public class VisitTreeController extends Controller {
         // Remember already saved result from view scoped bean
 		// validateSession();
         
-		
-		
-		
 		obtainVisits();
 		
-		
-        this.customers = customerService.getCustomers();
+		this.customers = customerService.getCustomers();
         
-        selected = new Visit();
-        selected.setCliente(new Customer());
-       
-		Property pro = new Property();
+        Property pro = new Property();
 		pro.setEntidad("visita");
 		this.properties = this.proService.getPropertysFiltered(pro);
 		propertyValue = new String[this.properties.size()];
@@ -113,15 +108,17 @@ public class VisitTreeController extends Controller {
     public void clickFilter( ActionEvent event ) {
     	
     	this.obtainVisits();
+		selected = null;
+        //selected.setCliente(new Customer());
     	
     	this.bNewCustomer = true;
-    	selected.setCliente(new Customer());
+    	
+    	//selected.setCliente(new Customer());
     }
 
     private void obtainVisits() {
     	
     	this.lisVisits = visitService.getVisitsFiltered(filter, "cliente.nombre");
-    	
     	
     	TreeNode root = new DefaultTreeNode( new Visit(), null);
     	int idCustomer = -1;
@@ -135,14 +132,30 @@ public class VisitTreeController extends Controller {
     		if (i==0) {
     			newLevel = new DefaultTreeNode( v, root);
     		} else if ( v.getCliente().getIdCliente().intValue()!= idCustomer ) {
+    			// set the num of visitis
+    			//((Visit)newLevel.getData()).setTreeColumn( newLevel.getChildCount() + "" );
     			newLevel = new DefaultTreeNode( v, root);
     		}
+    		//v.setTreeColumn(v.getFechaFormateada());
     		treeCustomer = new DefaultTreeNode( v, newLevel);
     		idCustomer = v.getCliente().getIdCliente().intValue();
     	}
     	this.treeVisitsRoot = root;
     	
     }
+    
+//    public void clickRowTree(ActionEvent event ) {
+//    	
+//    	this.selected = (Visit)selectedNode.getData();
+//    	this.selCustomer = this.selected.getCliente();
+//    }
+    
+    public void clickRowTree( ) {
+    	
+    	this.selected = (Visit)selectedNode.getData();
+    	this.selCustomer = this.selected.getCliente();
+    }
+    
     
     public List<VisitProperty> getVisitPropertyValues(String propiedad) {
     	
@@ -157,15 +170,19 @@ public class VisitTreeController extends Controller {
      
     public void clickVisitSave(ActionEvent event) {
     	
-    	if (selected.getIdVisita() != null) {
-    		System.out.println( "CUSTOMER SELECTED(update):" + selected.toString() );
-    		visitService.update(selected);
-    	} else {
-    		System.out.println( "CUSTOMER SELECTED(save_new):" + selected.toString() );
-    		visitService.insert(selected);
+    	try {
+	    	if (selected.getIdVisita() != null) {
+	    		System.out.println( "CUSTOMER SELECTED(update):" + selected.toString() );
+	    		visitService.update(selected);
+	    	} else {
+	    		System.out.println( "CUSTOMER SELECTED(save_new):" + selected.toString() );
+	    		visitService.insert(selected);
+	    	}
+	    	Util.showMessage("La visita se ha guardado correctamente");
+    	} catch (Exception e) {
+    		Util.showMessage("Error guardando la visita: " + e.toString());
     	}
-    	FacesContext.getCurrentInstance().addMessage(null,
-                new FacesMessage("Se ha guardado correctamente la visita "));
+    	
     }
     
     public void clickVisitCancel(ActionEvent event) {
@@ -346,6 +363,14 @@ public class VisitTreeController extends Controller {
 
 	public void setSelectedNodes(TreeNode[] selectedNodes) {
 		this.selectedNodes = selectedNodes;
+	}
+
+	public TreeNode getSelectedNode() {
+		return selectedNode;
+	}
+
+	public void setSelectedNode(TreeNode selectedNode) {
+		this.selectedNode = selectedNode;
 	}
 	
 	

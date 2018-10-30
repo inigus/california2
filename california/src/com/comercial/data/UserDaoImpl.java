@@ -1,5 +1,6 @@
 package com.comercial.data;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.EntityManager;
@@ -35,9 +36,9 @@ public class UserDaoImpl extends BaseDao implements UserDao {
 		try {
 			em.persist(user);
 			return true;
-		} catch (Exception e) {
-			e.printStackTrace();
-			return false;
+		} catch (Throwable t) {
+			t.printStackTrace();
+			throw t;
 		}
 	}
 
@@ -46,9 +47,9 @@ public class UserDaoImpl extends BaseDao implements UserDao {
 		try {
 			em.remove(user);
 			return true;
-		} catch (Exception e) {
-			e.printStackTrace();
-			return false;
+		} catch (Throwable t) {
+			t.printStackTrace();
+			throw t;
 		}
 	}
 	
@@ -56,14 +57,12 @@ public class UserDaoImpl extends BaseDao implements UserDao {
 	public List<User> getAllUser() {
 
 		try {
-			
-			
 			List<User> users = (List<User>) em
 					.createQuery("SELECT u from User u")
 					.getResultList();
 			return users;
 		} catch (NoResultException e) {
-			return null;
+			return new ArrayList<User>();
 		}
 	}
 
