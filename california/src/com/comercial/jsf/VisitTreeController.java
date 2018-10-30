@@ -50,7 +50,8 @@ public class VisitTreeController extends Controller {
 	private List<Visit> lisVisits;
 	
 	private TreeNode treeVisitsRoot;
-	 private TreeNode[] selectedNodes;
+	private TreeNode selectedNode;
+	private TreeNode[] selectedNodes;
 	
 	private Visit filter = new Visit();
 	
@@ -135,13 +136,23 @@ public class VisitTreeController extends Controller {
     		if (i==0) {
     			newLevel = new DefaultTreeNode( v, root);
     		} else if ( v.getCliente().getIdCliente().intValue()!= idCustomer ) {
+    			// set the num of visitis
+    			//((Visit)newLevel.getData()).setTreeColumn( newLevel.getChildCount() + "" );
     			newLevel = new DefaultTreeNode( v, root);
     		}
+    		//v.setTreeColumn(v.getFechaFormateada());
     		treeCustomer = new DefaultTreeNode( v, newLevel);
     		idCustomer = v.getCliente().getIdCliente().intValue();
     	}
     	this.treeVisitsRoot = root;
     	
+    }
+    
+    
+    public void clickEditVisit( ActionEvent event ) {
+    	
+    	this.selected = (Visit)selectedNode.getData();
+    	this.selCustomer = this.selected.getCliente();
     }
     
     public List<VisitProperty> getVisitPropertyValues(String propiedad) {
@@ -346,6 +357,14 @@ public class VisitTreeController extends Controller {
 
 	public void setSelectedNodes(TreeNode[] selectedNodes) {
 		this.selectedNodes = selectedNodes;
+	}
+
+	public TreeNode getSelectedNode() {
+		return selectedNode;
+	}
+
+	public void setSelectedNode(TreeNode selectedNode) {
+		this.selectedNode = selectedNode;
 	}
 	
 	

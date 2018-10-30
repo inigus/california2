@@ -15,7 +15,6 @@
 		<class>com.comercial.model.Property</class>
 		<class>com.comercial.model.Visit</class>
 		<class>com.comercial.model.VisitProperty</class>
-		
 		<class>com.comercial.model.User</class>
 		
 <!-- 		<class>CCC.Cliente</class>
@@ -34,6 +33,11 @@
 			<property name="javax.persistence.jdbc.url" value="jdbc:mysql://localhost/comercial" />
 			<property name="javax.persistence.jdbc.user" value="comercial" />
 			<property name="javax.persistence.jdbc.password" value="12345" />
+			
+			<!-- property name="javax.persistence.jdbc.url" value="jdbc:mysql://instancia1.cf4txqdqxsfe.us-west-2.rds.amazonaws.com/comercial" />
+			<property name="javax.persistence.jdbc.user" value="inigus" />
+			<property name="javax.persistence.jdbc.password" value="Inigete-72" /-->
+			
 
 			<property name="hibernate.dialect" value="org.hibernate.dialect.MySQL5InnoDBDialect" />
 
