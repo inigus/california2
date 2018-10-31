@@ -91,6 +91,9 @@ public class VisitTreeController extends Controller {
 		obtainVisits();
 		
 		this.customers = customerService.getCustomers();
+		
+		this.selected = new Visit();
+		this.selected.setCliente( new Customer() );
         
         Property pro = new Property();
 		pro.setEntidad("visita");
