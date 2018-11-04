@@ -20,8 +20,9 @@ public class Util {
 	
 	
 	public static void showError(String message) {
-		
+
 		FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error!", message ));
+
 	}
 
 }

@@ -89,9 +89,8 @@ public class VisitTreeController extends Controller {
 		// validateSession();
         
 		obtainVisits();
-		
 		this.customers = customerService.getCustomers();
-		
+	
 		//this.selected = new Visit();
 		//this.selected.setCliente( new Customer() );
         
@@ -113,12 +112,7 @@ public class VisitTreeController extends Controller {
     	this.obtainVisits();
 		selected = null;
 		selCustomer = null;
-        
-		//selected.setCliente(new Customer());
-    	
-    	this.bNewCustomer = true;
-    	
-    	//selected.setCliente(new Customer());
+
     }
 
     private void obtainVisits() {
