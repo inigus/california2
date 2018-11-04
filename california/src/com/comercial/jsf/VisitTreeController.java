@@ -29,6 +29,7 @@ import com.comercial.service.PropertyServiceImpl;
 import com.comercial.service.VisitService;
 import com.comercial.service.VisitServiceImpl;
 import com.comercial.utils.K;
+import com.comercial.utils.Util;
 
 
 @ManagedBean(name = "visitTree")
@@ -57,9 +58,9 @@ public class VisitTreeController extends Controller {
 	
 	private String filterGroup = "";
 	
-
+	private Visit selected=null;
 	
-	private Visit selected;
+	private Customer selCustomer = null;
 	
 	private List<Property> properties;
 	
@@ -76,7 +77,7 @@ public class VisitTreeController extends Controller {
 
 	private List<VisitProperty> listPropertiesSelected = new ArrayList<>();
 
-	private Customer selCustomer = new Customer();
+
 
 	public VisitTreeController() {
 		// TODO Auto-generated method stub
@@ -87,18 +88,14 @@ public class VisitTreeController extends Controller {
         // Remember already saved result from view scoped bean
 		// validateSession();
         
-		
-		
-		
 		obtainVisits();
 		
+		this.customers = customerService.getCustomers();
 		
-        this.customers = customerService.getCustomers();
+		//this.selected = new Visit();
+		//this.selected.setCliente( new Customer() );
         
-        selected = new Visit();
-        selected.setCliente(new Customer());
-       
-		Property pro = new Property();
+        Property pro = new Property();
 		pro.setEntidad("visita");
 		this.properties = this.proService.getPropertysFiltered(pro);
 		propertyValue = new String[this.properties.size()];
@@ -114,21 +111,25 @@ public class VisitTreeController extends Controller {
     public void clickFilter( ActionEvent event ) {
     	
     	this.obtainVisits();
+		selected = null;
+		selCustomer = null;
+        
+		//selected.setCliente(new Customer());
     	
     	this.bNewCustomer = true;
-    	selected.setCliente(new Customer());
+    	
+    	//selected.setCliente(new Customer());
     }
 
     private void obtainVisits() {
     	
     	this.lisVisits = visitService.getVisitsFiltered(filter, "cliente.nombre");
     	
-    	
     	TreeNode root = new DefaultTreeNode( new Visit(), null);
     	int idCustomer = -1;
     	Visit v;
     	TreeNode newLevel = null;
-    	TreeNode treeCustomer = null;;
+    	TreeNode treeCustomer = null;
     	
     	for ( int i=0; i<lisVisits.size();i++ ){
     		v = lisVisits.get(i);
@@ -148,12 +149,22 @@ public class VisitTreeController extends Controller {
     	
     }
     
+//    public void clickRowTree(ActionEvent event ) {
+//    	
+//    	this.selected = (Visit)selectedNode.getData();
+//    	this.selCustomer = this.selected.getCliente();
+//    }
     
-    public void clickEditVisit( ActionEvent event ) {
+    public void clickRowTree( ) {
     	
-    	this.selected = (Visit)selectedNode.getData();
+    	Visit v = (Visit)selectedNode.getData();
+    	//this.selected = (Visit)selectedNode.getData();
+    	
+    	this.selected = this.visitService.get(v.getIdVisita());
     	this.selCustomer = this.selected.getCliente();
+    	
     }
+    
     
     public List<VisitProperty> getVisitPropertyValues(String propiedad) {
     	
@@ -168,15 +179,19 @@ public class VisitTreeController extends Controller {
      
     public void clickVisitSave(ActionEvent event) {
     	
-    	if (selected.getIdVisita() != null) {
-    		System.out.println( "CUSTOMER SELECTED(update):" + selected.toString() );
-    		visitService.update(selected);
-    	} else {
-    		System.out.println( "CUSTOMER SELECTED(save_new):" + selected.toString() );
-    		visitService.insert(selected);
+    	try {
+	    	if (selected.getIdVisita() != null) {
+	    		System.out.println( "CUSTOMER SELECTED(update):" + selected.toString() );
+	    		visitService.update(selected);
+	    	} else {
+	    		System.out.println( "CUSTOMER SELECTED(save_new):" + selected.toString() );
+	    		visitService.insert(selected);
+	    	}
+	    	Util.showMessage("La visita se ha guardado correctamente");
+    	} catch (Exception e) {
+    		Util.showMessage("Error guardando la visita: " + e.toString());
     	}
-    	FacesContext.getCurrentInstance().addMessage(null,
-                new FacesMessage("Se ha guardado correctamente la visita "));
+    	
     }
     
     public void clickVisitCancel(ActionEvent event) {
@@ -187,7 +202,7 @@ public class VisitTreeController extends Controller {
     	System.out.println( "CUSTOMER SELECTED(DELETE):" + selected.toString() );
     }
     
-    public void addProperty(String property) {
+    public void clickAddProperty(String property) {
     	
     	int index = this.mPropertyIndex.get(property);
     	String value = this.propertyValue[index];
@@ -201,16 +216,21 @@ public class VisitTreeController extends Controller {
     	System.out.println("aaaaaaaaaaaaa");
     }
     
-    public void deleteProperty(String property) {
+    public void clickRemoveProperty(ActionEvent event) {
 	
-    	Property prop = Property.getPropertyByName(properties, property);
-    
-    	for (int i = this.selected.getPropiedadesVisita().size()-1; i>=0; i-- ) {
-    		VisitProperty vProp = this.selected.getPropiedadesVisita().get(i);
-    		if (vProp.getPropiedad().equals(prop) && vProp.isSelected() ) {
-    			this.selected.getPropiedadesVisita().remove(vProp);
-    		}
-		}
+    	//Property prop = Property.getPropertyByName(properties, property);
+    	for (VisitProperty vPropSel : this.listPropertiesSelected ) {
+    		this.selected.removeVisitProperty(vPropSel);
+    	}
+    	
+//    	this.selected.removeVisitProperty(prop, value);
+//    	
+//    	for (int i = this.selected.getPropiedadesVisita().size()-1; i>=0; i-- ) {
+//    		VisitProperty vProp = this.selected.getPropiedadesVisita().get(i);
+//    		if (vProp.getPropiedad().equals(prop) && vProp.isSelected() ) {
+//    			this.selected.getPropiedadesVisita().remove(vProp);
+//    		}
+//		}
     }
     
     public void selectCustomerOnFilter(){
@@ -222,12 +242,17 @@ public class VisitTreeController extends Controller {
     
     public void clickCustomerSave(ActionEvent event) {
     	
-    	if (bNewCustomer) {
-    		customerService.insert( selCustomer );
-    		this.selected.setCliente(selCustomer);
-    		bNewCustomer = false;
-    	} else {
-    		customerService.update( selected.getCliente() );
+    	try {
+	    	if (bNewCustomer) {
+	    		customerService.insert( selCustomer );
+	    		this.selected.setCliente(selCustomer);
+	    		bNewCustomer = false;
+	    	} else {
+	    		customerService.update( selected.getCliente() );
+	    	}
+	    	Util.showMessage("Cliente guardado correctamente");
+    	} catch (Exception e) {
+    		Util.showError("Error guardadndo cliente:" + e.toString());
     	}
     	
     }

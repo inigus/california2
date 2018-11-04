@@ -38,6 +38,7 @@ public class PropertyServiceImpl  extends BaseService implements PropertyService
 			this.finishTransaction();
 		} catch (Throwable t) {
 			this.finishTransaction(t);
+			throw t;
 		}
 		return propiedad;
 	}
@@ -55,8 +56,8 @@ public class PropertyServiceImpl  extends BaseService implements PropertyService
 			this.finishTransaction();
 		} catch (Throwable t) {
 		    this.finishTransaction(t);
+		    throw t;
 		}
-			
 		return resul;
 	}
 

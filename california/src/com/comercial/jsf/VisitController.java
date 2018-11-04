@@ -12,11 +12,6 @@ import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
-import javax.faces.event.ValueChangeEvent;
-
-import org.primefaces.context.RequestContext;
-import org.primefaces.event.SelectEvent;
-
 
 import com.comercial.model.Customer;
 import com.comercial.model.Property;
@@ -39,7 +34,7 @@ public class VisitController {
 	private CustomerController customerController;
 	
 	@ManagedProperty("#{customerService}")
-    private CustomerServiceImpl service;
+    private CustomerServiceImpl customerService;
 	
 	private Visit selected;
 	
@@ -75,13 +70,42 @@ public class VisitController {
 	
 	private List<Customer> customers;
 
+	private List<VisitProperty> listaVisitas = new ArrayList<>();
+	private List<VisitProperty> listaVisitasSeleccionadas;
 	
-   @PostConstruct
+	public void removeXXX(ActionEvent event) {
+		
+		System.out.println("aqui entro");
+
+		for (VisitProperty v : listaVisitasSeleccionadas) {
+			System.out.println("POR FIN PASOOOOOOO: " + v.toString());
+		}
+	}
+
+	public List<VisitProperty> getListaVisitas() {
+		return listaVisitas;
+	}
+	public void setListaVisitas(List<VisitProperty> listaVisitas) {
+		this.listaVisitas = listaVisitas;
+	}
+
+	public List<VisitProperty> getListaVisitasSeleccionadas() {
+		return listaVisitasSeleccionadas;
+	}
+	public void setListaVisitasSeleccionadas(List<VisitProperty> listaVisitasSeleccionadas) {
+		this.listaVisitasSeleccionadas = listaVisitasSeleccionadas;
+	}
+
+
+
+@PostConstruct
     public void init() {       
         // Remember already saved result from view scoped bean
         System.out.println(" supongo sera como un constructor....");
         
-        this.customers = service.getCustomers();
+        this.customers = customerService.getCustomers();
+        
+        //themes = service.getThemes();
     }
 	
 	public VisitController() {
@@ -97,6 +121,13 @@ public class VisitController {
 		int i = 0;
 		for (Property property : properties) {
 			mPropiedadIndex.put(property.getPropiedad(), i++ );
+		}
+		
+		for (Visit v : this.visits ) {
+			for (VisitProperty vp : v.getPropiedadesVisita()) {
+				this.listaVisitas.add(vp);
+			}
+			break;
 		}
 		
 	}
@@ -350,12 +381,12 @@ public class VisitController {
 		this.customers = customers;
 	}
 
-	public CustomerServiceImpl getService() {
-		return service;
+	public CustomerServiceImpl getCustomerService() {
+		return customerService;
 	}
 
-	public void setService(CustomerServiceImpl service) {
-		this.service = service;
+	public void setCustomerService(CustomerServiceImpl customerService) {
+		this.customerService = customerService;
 	}
 
 	public boolean isShowFilerVisitForm() {
@@ -422,12 +453,22 @@ public class VisitController {
 		this.edited = edited;
 	}
 
-
 	
 	
-	
-	
-	
+    private List<String> selectedOptions;
+ 
+//    public void setService(ThemeService service) {
+//        this.service = service;
+//    }
+ 
+    public List<String> getSelectedOptions() {
+        return selectedOptions;
+    }
+ 
+    public void setSelectedOptions(List<String> selectedOptions) {
+        this.selectedOptions = selectedOptions;
+    }
+ 
 	
 	
 }

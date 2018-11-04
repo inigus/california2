@@ -25,6 +25,7 @@ import com.comercial.service.PropertyServiceImpl;
 import com.comercial.service.VisitService;
 import com.comercial.service.VisitServiceImpl;
 import com.comercial.utils.K;
+import com.comercial.utils.Util;
 
 
 @ManagedBean(name = "visitEdit")
@@ -101,15 +102,20 @@ public class VisitEditController extends Controller {
      
     public void clickVisitSave(ActionEvent event) {
     	
-    	if (selected.getIdVisita() != null) {
-    		System.out.println( "CUSTOMER SELECTED(update):" + selected.toString() );
-    		visitService.update(selected);
-    	} else {
-    		System.out.println( "CUSTOMER SELECTED(save_new):" + selected.toString() );
-    		visitService.insert(selected);
+    	try {
+	    	
+    		if (selected.getIdVisita() != null) {
+	    		System.out.println( "CUSTOMER SELECTED(update):" + selected.toString() );
+	    		visitService.update(selected);
+	    	} else {
+	    		System.out.println( "CUSTOMER SELECTED(save_new):" + selected.toString() );
+	    		visitService.insert(selected);
+	    	}
+	    	Util.showMessage("Visita guardada correctamente");
+	    	
+    	} catch (Exception e) {
+    		Util.showMessage("ERROR guardando la visita:" + e.toString());
     	}
-    	FacesContext.getCurrentInstance().addMessage(null,
-                new FacesMessage("Se ha guardado correctamente la visita "));
     }
     
     public void clickVisitCancel(ActionEvent event) {
@@ -158,12 +164,17 @@ public class VisitEditController extends Controller {
     
     public void clickCustomerSave(ActionEvent event) {
     	
-    	if (bNewCustomer) {
-    		customerService.insert( selCustomer );
-    		this.selected.setCliente(selCustomer);
-    		bNewCustomer = false;
-    	} else {
-    		customerService.update( selected.getCliente() );
+    	try {
+	    	if (bNewCustomer) {
+	    		customerService.insert( selCustomer );
+	    		this.selected.setCliente(selCustomer);
+	    		bNewCustomer = false;
+	    	} else {
+	    		customerService.update( selected.getCliente() );
+	    	}
+	    	Util.showMessage("Cliente guardado correctamente");
+    	} catch (Exception e) {
+    		Util.showError("Error guardadndo cliente:" + e.toString());
     	}
     	
     }

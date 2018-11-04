@@ -30,12 +30,10 @@ public class CustomerDaoImpl extends BaseDao implements CustomerDao {
 	}
 
 	@Override
-	public Customer insert(Customer customer) {
-		
+	public Customer insert(Customer customer) {		
 			em.persist(customer);
 			return customer;
 
-		
 	}
 	
 	@Override
@@ -50,9 +48,9 @@ public class CustomerDaoImpl extends BaseDao implements CustomerDao {
 		try {
 			em.remove(customer);
 			return true;
-		} catch (Exception e) {
-			e.printStackTrace();
-			return false;
+		} catch (Throwable t) {
+			t.printStackTrace();
+			throw t;
 		}
 	}
 	

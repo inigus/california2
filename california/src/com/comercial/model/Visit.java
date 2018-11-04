@@ -71,10 +71,23 @@ public class Visit implements Serializable {
 		int maxOrden = 1;
 		for (VisitProperty vProp : propiedadesVisita) {
 			if ( vProp.getPropiedad().getIdPropiedad()==prop.getIdPropiedad() ) {
-				maxOrden++;
+				if (maxOrden <= vProp.getOrden()) {
+					maxOrden = vProp.getOrden() + 1;
+				}
 			}
 		}
 		propiedadesVisita.add(new VisitProperty(this, prop, value, maxOrden));
+	}
+	
+	
+	public void removeVisitProperty(VisitProperty vPropRemove) {
+		
+		for (VisitProperty vProp : propiedadesVisita) {
+			if (vPropRemove.equals(vProp)) {
+				propiedadesVisita.remove(vProp);
+				break;
+			}
+		}
 	}
 	
 	

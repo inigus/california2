@@ -101,12 +101,14 @@ public class VisitProperty implements Serializable {
 		this.selected = selected;
 	}
 	
-	private static final String sep = "#@#@";
+	private static final String sep = "_##_";
 	public static String toConvertString(VisitProperty obj) {
 		
-		return obj.valor + sep + obj.orden + sep + obj.selected + sep + 
-				obj.propiedad.getIdPropiedad() + sep + obj.propiedad.getPropiedad() + sep + obj.propiedad.getEntidad();
-		
+		return obj.valor + sep 
+				+ obj.orden + sep 
+				+ obj.propiedad.getIdPropiedad() + sep; 
+//				+ obj.propiedad.getPropiedad() + sep 
+//				+ obj.propiedad.getEntidad();
 	}
 	
 	public static VisitProperty fromConvertString(String val) {
@@ -115,8 +117,9 @@ public class VisitProperty implements Serializable {
 		String[] aVal = val.split(sep);
 		vp.setValor(aVal[0]);
 		vp.setOrden(Integer.parseInt(aVal[1]));
-		vp.setSelected(Boolean.getBoolean(aVal[2]));
-		vp.setPropiedad(new Property(Integer.parseInt(aVal[3]),aVal[4],aVal[5]));
+		vp.setPropiedad(new Property() );
+		vp.getPropiedad().setIdPropiedad(Integer.parseInt(aVal[2]));
+		//vp.setPropiedad(new Property(Integer.parseInt(aVal[2]),aVal[3],aVal[4]));
 		
 		return vp;
 		
@@ -141,31 +144,29 @@ public class VisitProperty implements Serializable {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
+		
 		VisitProperty other = (VisitProperty) obj;
-		if (orden != other.orden)
+		if ( !valor.equals(other.getValor()) ) {
 			return false;
-		if (propiedad == null) {
-			if (other.propiedad != null)
-				return false;
-		} else if (!propiedad.equals(other.propiedad))
+		}
+		if ( orden != other.orden ) {
 			return false;
-		if (valor == null) {
-			if (other.valor != null)
-				return false;
-		} else if (!valor.equals(other.valor))
+		}
+		if (propiedad==null || other.getPropiedad()==null) {
 			return false;
-		if (visita == null) {
-			if (other.visita != null)
-				return false;
-		} else if (!visita.equals(other.visita))
+		}
+		if (propiedad.getIdPropiedad()!= other.getPropiedad().getIdPropiedad()) {
 			return false;
+		}
+		
 		return true;
 	}
 
 	@Override
 	public String toString() {
-		return "VisitProperty [visita=" + visita + ", propiedad=" + propiedad + ", orden=" + orden + ", valor=" + valor
-				+ "]";
+		
+		return toConvertString(this);
+		//return "VisitProperty [  orden=" + orden + ", valor=" + valor +  ", propiedad=" + propiedad + ", visita= [" + visita + "] ]";
 	}
 
 	

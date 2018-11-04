@@ -41,6 +41,7 @@ public class VisitServiceImpl  extends BaseService implements VisitService {
 			this.finishTransaction();
 		} catch (Throwable t) {
 			this.finishTransaction(t);
+			throw t;
 		}
 		return visita;
 	}
@@ -62,6 +63,7 @@ public class VisitServiceImpl  extends BaseService implements VisitService {
 		} catch (Throwable t) {
 			t.printStackTrace();
 		    this.finishTransaction(t);
+		    throw t;
 		}
 			
 		return resul;

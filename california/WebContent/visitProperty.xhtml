@@ -1,0 +1,36 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:c="http://java.sun.com/jsp/jstl/core"
+                xmlns:p="http://primefaces.org/ui"
+                >
+
+	<c:set var="pro" value="#{ visitTree.properties[index] }" />
+	
+	<p:panelGrid id="visitAttributesxx_#{index}" columns="4" columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-4,ui-grid-col-2" 
+				layout="grid" styleClass="ui-panelgrid-blank form-group" style="border:0px none; background-color:transparent;"
+				rendered="#{visitTree.selected != null }">             		
+				                        		
+		<p:outputLabel id="panel#{index}"  value="#{pro.propiedad} #{loop.index}"/>
+	    <p:outputPanel>
+			<div class="ui-inputgroup">
+	           <p:inputText id="valorProperty_#{index}" value="#{visitTree.propertyValue[index]}" placeholder="Añadir un #{pro.propiedad}" />
+	           <p:commandButton icon="fa fa-plus" styleClass="white-button" action="#{visitTree.clickAddProperty(pro.propiedad)}" update="f1:visitProperties"  oncomplete="removeProperties()" />  
+	       </div>
+	    </p:outputPanel>
+	                 	                       
+		<p:selectManyMenu   value="#{visitTree.listPropertiesSelected}" 
+							converter="visitPropertyConverter" 
+							showCheckbox="true" >
+			<f:selectItems  value="#{visitTree.getVisitPropertyValues(pro.propiedad)}" var="item"
+							itemLabel="#{item.valor}" 
+							itemValue="#{item}"   />
+		</p:selectManyMenu>
+	                 	
+		<p:commandButton  id="deleteee#{index}"  update="f1:visitProperties"  icon="fa fa-trash" value="Eliminar"  styleClass="white-button" actionListener="#{visitTree.clickRemoveProperty}" oncomplete="removeProperties()" />
+	                		
+	                		<!-- onstart="removeProperties()"  -->
+	</p:panelGrid>
+
+</ui:composition>

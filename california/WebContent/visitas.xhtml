@@ -17,6 +17,53 @@
         <!-- INICIO FILTRO -->
             <div class="ui-g-12">
                 <div class="card">
+                 <h:panelGrid columns="2" style="margin-bottom:10px" cellpadding="5" columnClasses="label, value">
+			        
+			        <p:selectManyMenu id="advanced" 
+			        					value="#{visitController.selectedThemes}" 
+			        					converter="themeConverter"
+			                          	var="t" 
+			                          	filter="true" filterMatchMode="contains" 
+			                          	showCheckbox="true">
+			            <f:selectItems value="#{visitController.themes}" 
+			            				var="theme" 
+			            				itemLabel="#{theme.displayName}" 
+			            				itemValue="#{theme}" />
+			 
+			            <p:column>
+			                <h:outputText styleClass="ui-theme ui-theme-#{t.name}" />
+			            </p:column>
+			            <p:column>
+			                <h:outputText value="#{t.displayName}" />
+			            </p:column>
+			        </p:selectManyMenu>
+			    </h:panelGrid>
+                	
+                	<h:panelGrid id="panelValues" columns="1" styleClass="form-group ui-panelgrid-blank" >
+                		<p:selectManyMenu   value="#{visitController.listaVisitasSeleccionadas}" 
+											converter="visitPropertyConverter" 
+											filter="true" filterMatchMode="contains"
+											showCheckbox="true" 
+											var="t" > 
+							<f:selectItems  value="#{visitController.listaVisitas}" var="item"
+											itemLabel="#{item.valor}" 
+											itemValue="#{item}"   />
+							<p:column>
+			                	<h:outputText styleClass="ui-theme ui-theme-#{t.propiedad.propiedad}" />
+			            	</p:column>
+			 
+			            	<p:column>
+			                	<h:outputText value="#{t.orden} " />
+			            	</p:column>
+			            	<p:column>
+			                	<h:outputText value="#{t.valor} " />
+			            	</p:column>
+						</p:selectManyMenu>
+							
+						<p:commandButton value="quita" actionListener="#{visitController.removeXXX}"             update=":f1" />
+						
+					</h:panelGrid>
+                
                     
                     <p:panel id="basic" header="Filtro de Visitas" toggleable="true" collapsed="true">
                     	<h:panelGrid id="panelVisitFilter" columns="1" styleClass="form-group ui-panelgrid-blank" >

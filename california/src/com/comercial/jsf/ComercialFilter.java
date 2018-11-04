@@ -30,7 +30,7 @@ public class ComercialFilter implements Filter {
         user = (User)session.getAttribute(K.session_user);
 		String urlLogin = request.getContextPath() + "/faces/" + K.page_login;
 		
-		if (request.getRequestURI().equals(urlLogin) || user!=null || request.getRequestURI().indexOf(".xhtml")==-1) {
+		if (request.getRequestURI().indexOf(urlLogin)!=-1 || user!=null || request.getRequestURI().indexOf(".xhtml")==-1) {
 			chain.doFilter(req, resp);
         } else {
         	response.sendRedirect(request.getContextPath() + "/faces/" + K.page_login );

@@ -1,5 +1,6 @@
 package com.comercial.data;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.EntityManager;
@@ -25,7 +26,7 @@ public class PropertyDaoImpl extends BaseDao implements PropertyDao {
 
 			return propiedades;
 		} catch (NoResultException e) {
-			return null;
+			return new ArrayList<Property>();
 		}
 	}
 
